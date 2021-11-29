@@ -543,6 +543,6 @@ getTarget = createTarget(db_name)
 getE3 = createE3(db_name)
 
 #ppi_eu not used, need to be called in the function for creating nodes and relns
-getRels = createReln(tx,getNodes)
+getRels = createReln(db_name,getNodes)
 #db_name.commit()
 graph.commit(db_name)
