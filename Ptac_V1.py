@@ -183,7 +183,8 @@ def createPtac(tx):
                                                         "Ring Count": rc,
                                                         "Hydrogen Bond Acceptor": hbac,
                                                         "Hydrogen Bond Donor": hbdc, "Rotatable Bond": rbc,
-                                                        "Source": f"https://doi.org/{source}"})
+                                                        "Source": f"https://doi.org/{source}",
+                                                        "Structure": f"https://molview.org/?q={smiles}"})
 
         #tx.create(node_dict["Protac"][protac])
 
@@ -205,7 +206,7 @@ def createPtac(tx):
         else:
             node_dict["Protac"][protac] = Node("Protac", ** {"Protac":protac,"InChI Key":inchikey,"SMILES":smiles,"Cell":cell,"Status":status,
                                                              "Ligand Name":ligname,"Linker Type":linkertype,"Hydrogen Bond Acceptor":hba,
-                                                             "Hydrogen Bond Donor":hbd,"Off targets":offtar,"PubMed":pubmed})
+                                                             "Hydrogen Bond Donor":hbd,"Off targets":offtar,"PubMed":pubmed,"Structure": f"https://molview.org/?q={smiles}"})
 
             #tx.create(node_dict["Protac"][protac])
 
@@ -222,7 +223,7 @@ def createPtac(tx):
             node_dict["Protac"][protac] = Node("Protac", **{"Protac":protac, "Protac Synonym":ptacsyn,"InChI":inchi,"InChI Key":inchikey,
                                         "Smiles":smiles,"Molecular Weight":mw,"Molecular Formula":mf,"Ring Count":rc,
                                                         "Hydrogen Bond Acceptor Count":hba,"Hydrogen Bond Donor Count":hbd,"Rotatable Bond Count":rbc,
-                                                        "Compound":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}","Polar Surface area":polarea})
+                                                        "Compound":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}","Polar Surface area":polarea,"Structure": f"https://molview.org/?q={smiles}"})
 
 
     # Add also updated nodes into graph
@@ -268,6 +269,91 @@ def createTarget(tx):
 
         if target in gene2drug:
             node_dict["Protein"][target].update({"Drug&Class": gene2drug[target]})
+
+    for node_type in node_dict:
+        _add_nodes(
+            node_dict=node_dict[node_type],
+            tx=tx
+        )
+
+    return node_dict
+
+#fn to add ligases
+def createE3(tx):
+
+    #create E3 ligase nodes from protacdb
+    for e3 in tqdm(ptacdb["E3 ligase"].values, total=ptacdb.shape[0]):
+
+        if e3 in node_dict["E3 ligase"]:
+            continue
+
+        node_dict["E3 ligase"][e3] = Node("E3 ligase", **{"Name":e3})
+
+        #print(e3)
+
+        if e3 in ubinet_e3['E3'].values:
+            #print("Found")
+            #print(e3)
+            #print(e3 in ubinet_e3['E3'].index.values)
+            pos = ubinet_e3[ubinet_e3["E3"] == e3].index
+            #print(pos)
+
+            #print(pos[0])
+            #a = ubinet_e3.loc[[pos[0]]]
+            a = ubinet_e3.loc[pos,"Category"].values[0]
+            #print(a)
+
+            node_dict["E3 ligase"][e3].update({"E3 Category": a})
+
+        if e3 in ubinet_e3_anno['Gene Name'].values:
+
+            pos = ubinet_e3_anno[ubinet_e3_anno["Gene Name"] == e3].index
+
+            seq = ubinet_e3_anno.loc[pos,"Sequence"].values[0]
+            func = ubinet_e3_anno.loc[pos,"Function [CC]"].values[0]
+            gomf = ubinet_e3_anno.loc[pos,"Gene ontology (molecular function)"].values[0]
+            gobp = ubinet_e3_anno.loc[pos,"Gene ontology (biological process)"].values[0]
+            gocc = ubinet_e3_anno.loc[pos,"Gene ontology (cellular component)"].values[0]
+
+            node_dict["E3 ligase"][e3].update({"Sequence": seq,"Function": func, "GO molecular function":gomf, "GO biological process": gobp,
+                                               "GO cellular component":gocc})
+
+#create E3 ligase nodes from protacpedia
+    for e3 in tqdm(ptacpedia["E3 Ligase"].values, total=ptacpedia.shape[0]):
+
+        if e3 in node_dict["E3 ligase"]:
+            continue
+
+        node_dict["E3 ligase"][e3] = Node("E3 ligase", **{"Name":e3})
+
+        #print(e3)
+
+        if e3 in ubinet_e3['E3'].values:
+            #print("Found")
+            #print(e3)
+            #print(e3 in ubinet_e3['E3'].index.values)
+            pos = ubinet_e3[ubinet_e3["E3"] == e3].index
+            #print(pos)
+
+            #print(pos[0])
+            #a = ubinet_e3.loc[[pos[0]]]
+            a = ubinet_e3.loc[pos,"Category"].values[0]
+            #print(a)
+
+            node_dict["E3 ligase"][e3].update({"E3 Category": a})
+
+        if e3 in ubinet_e3_anno['Gene Name'].values:
+
+            pos = ubinet_e3_anno[ubinet_e3_anno["Gene Name"] == e3].index
+
+            seq = ubinet_e3_anno.loc[pos,"Sequence"].values[0]
+            func = ubinet_e3_anno.loc[pos,"Function [CC]"].values[0]
+            gomf = ubinet_e3_anno.loc[pos,"Gene ontology (molecular function)"].values[0]
+            gobp = ubinet_e3_anno.loc[pos,"Gene ontology (biological process)"].values[0]
+            gocc = ubinet_e3_anno.loc[pos,"Gene ontology (cellular component)"].values[0]
+
+            node_dict["E3 ligase"][e3].update({"Sequence": seq,"Function": func, "GO molecular function":gomf, "GO biological process": gobp,
+                                               "GO cellular component":gocc})
 
     for node_type in node_dict:
         _add_nodes(
@@ -410,6 +496,18 @@ def createNodes(tx,geneDiseaseMapping,drugInfo):
 
     return(node_dict)
 
+def createReln(tx,ptacNode):
+
+    for target, e3, ptac in tqdm(ptacdb[["Target","E3 ligase","protac_name"]].values):
+        e3Tac = Relationship(ptacNode["E3 ligase"][e3],"binds",ptacNode["Protac"][ptac])
+        targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][ptac], **{"E3 ligase":e3})
+        e3Target = Relationship(ptacNode["E3 ligase"][e3], 'ubiquitinates', ptacNode["Protein"][target])
+
+        tx.create(e3Tac)
+        tx.create(targetTac)
+        tx.create(e3Target)
+
+
 def createRel(tx,csvfile,passNode,warheadFile,ppiFile):
 
     for row in tqdm(csvfile[["cmpdname","E3 ligase","Target","Warhead_name"]].values):
@@ -442,8 +540,9 @@ def createRel(tx,csvfile,passNode,warheadFile,ppiFile):
 
 getNodes = createPtac(db_name)
 getTarget = createTarget(db_name)
+getE3 = createE3(db_name)
 
 #ppi_eu not used, need to be called in the function for creating nodes and relns
-#getRels = createRel(db_name,prodb_pchem_war,getNodes,warhead,ppi_eu)
+getRels = createReln(tx,getNodes)
 #db_name.commit()
 graph.commit(db_name)
