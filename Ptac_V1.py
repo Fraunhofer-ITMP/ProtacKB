@@ -18,7 +18,7 @@ db_name,graph = populate_db("protacv1")
 #read protacdb with customized names
 
 ptacdb = pd.read_csv(
-    os.path.join(DATA_DIR,"pdbtest.csv"),
+    os.path.join(DATA_DIR,"protacdb_withnames.csv"),
     dtype=str,
     encoding=ENCODING
 )
@@ -28,23 +28,19 @@ ptacdb = pd.read_csv(
 #read protacpedia with customized names
 
 ptacpedia = pd.read_csv(
-    os.path.join(DATA_DIR,"ppdtest.csv"),
+    os.path.join(DATA_DIR,"protacpd_withnames.csv"),
     dtype=str,
     encoding=ENCODING
 )
-
-
-
 #print(ptacpedia.columns)
 
-#read pubchem
-
+#read pubchemW
 pchem = pd.read_csv(
     os.path.join(DATA_DIR,"pubchem.csv"),
     dtype=str,
     encoding=ENCODING
 )
-print(pchem.columns)
+#print(pchem.columns)
 
 #add disease names as node properties for each Protein
 
@@ -184,15 +180,15 @@ def createPtac(tx):
                                                         "InChI Key": inchikey,
                                                         "Smiles": smiles, "Molecular Weight": mw,
                                                         "Molecular Formula": mf, "Hydrogen Atom": hac,
-                                                        "Ring Count": rc})
-                                                        #"Hydrogen Bond Acceptor": hbac,
-                                                        #"Hydrogen Bond Donor": hbdc, "Rotatable Bond": rbc,
-                                                        ##"Source": f"https://doi.org/{source}"})
+                                                        "Ring Count": rc,
+                                                        "Hydrogen Bond Acceptor": hbac,
+                                                        "Hydrogen Bond Donor": hbdc, "Rotatable Bond": rbc,
+                                                        "Source": f"https://doi.org/{source}"})
 
         #tx.create(node_dict["Protac"][protac])
 
     inchikeys = {val['InChI Key']: i for i, val in node_dict["Protac"].items()}
-    print(inchikeys)
+    #print(inchikeys)
 
     #2 Protacpedia
     cols = ["ptac_name","InChI key","PROTAC SMILES","Cells","Active/Inactive","Ligand Name","Linker Type","Hbond acceptors",
@@ -202,28 +198,32 @@ def createPtac(tx):
 
         if inchikey in inchikeys:
 
-            print(inchikeys[inchikey])
-            print(protac)
-            #print({"Cell": cell, "Status": status, "Ligand": ligname, "Linker Type": linkertype,
-                 #"Off targets":offtar,"PubMed": pubmed})
 
-            node_dict["Protac"][inchikeys[inchikey]].update({"Cell": cell, "Status": status, "Ligand": ligname, "Linker Type": linkertype, "Off targets":offtar,"PubMed": pubmed})
-            #node_dict["Protac"][protac]['Cell'] = cell
-            #tx.graph.merge(node_dict["Protac"][inchikeys[inchikey]])
-
-            #node_dict["Protac"][protac]['Cell'] = cell
-            #node_dict["Protac"][protac].push()
-            #tx.graph.push(node_dict["Protac"][inchikeys[inchikey]])
-
-
+            node_dict["Protac"][inchikeys[inchikey]].update({"Cell": cell, "Status": status, "Ligand": ligname, "Linker Type": linkertype, "Off targets":offtar,"PubMed": pubmed,"ProtacPedia":protac})
 
 
         else:
             node_dict["Protac"][protac] = Node("Protac", ** {"Protac":protac,"InChI Key":inchikey,"SMILES":smiles,"Cell":cell,"Status":status,
-                                                             "Ligand Name":ligname,"Linker Tyep":linkertype,"Hydrogen Bond Acceptor":hba,
+                                                             "Ligand Name":ligname,"Linker Type":linkertype,"Hydrogen Bond Acceptor":hba,
                                                              "Hydrogen Bond Donor":hbd,"Off targets":offtar,"PubMed":pubmed})
 
             #tx.create(node_dict["Protac"][protac])
+
+    inchikeys_2 = {val['InChI Key']: i for i, val in node_dict["Protac"].items()}
+    #3 pubchem
+
+    cols_pchem = ["cmpdname","cmpdsynonym","mw","mf","polararea","hbondacc","hbonddonor","rotbonds","inchi","inchikey","isosmiles","cid"]
+    for protac, ptacsyn, mw, mf, polarea, hba, hbd, rbc, inchi, inchikey, smiles, cid in tqdm(pchem[cols_pchem].values, total=pchem.shape[0]):
+
+        if inchikey in inchikeys_2:
+            node_dict["Protac"][inchikeys_2[inchikey]].update({"Protac Name":protac,"Protac Synonym":ptacsyn,"Compound":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}","testinchi":inchikey})
+
+        else:
+            node_dict["Protac"][protac] = Node("Protac", **{"Protac":protac, "Protac Synonym":ptacsyn,"InChI":inchi,"InChI Key":inchikey,
+                                        "Smiles":smiles,"Molecular Weight":mw,"Molecular Formula":mf,"Ring Count":rc,
+                                                        "Hydrogen Bond Acceptor Count":hba,"Hydrogen Bond Donor Count":hbd,"Rotatable Bond Count":rbc,
+                                                        "Compound":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}","Polar Surface area":polarea})
+
 
     # Add also updated nodes into graph
     for node_type in node_dict:
@@ -233,14 +233,6 @@ def createPtac(tx):
         )
 
     return node_dict
-    #3 pubchem
-
-    #cols = ["cmpdname","cmpdsynonym","mw","mf","polararea","hbondacc","hbonddonor","rotbonds","inchi","inchikey","isosmiles","cid"]
-    #for protac, ptacsyn, mw, mf, polarea, hba, hbd, rbc, inchi, inchikey, smiles, cid in tqdm(
-        #pchem[cols].values, total=pchem.shape[0]):
-
-    #if
-
 
 #fn to add nodes
 def createNodes(tx,geneDiseaseMapping,drugInfo):
