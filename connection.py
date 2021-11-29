@@ -3,7 +3,7 @@
 import logging
 
 from py2neo import Graph, SystemGraph
-from py2neo.database.work import ClientError
+#from py2neo.database.work import ClientError
 
 from constants import ADMIN_NAME, ADMIN_PASS, URL
 
@@ -60,4 +60,13 @@ def populate_db(db_name: str):
     conn = Graph(URL, auth=(ADMIN_NAME, ADMIN_PASS), name=db_name)
     conn.delete_all()
     tx = conn.begin()
-    return tx
+    return tx,conn
+
+
+def _add_nodes(
+    node_dict: dict,
+    tx
+):
+    """Add nodes from dictionary."""
+    for node_type in node_dict:
+        tx.create(node_dict[node_type])

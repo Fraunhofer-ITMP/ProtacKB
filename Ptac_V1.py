@@ -5,14 +5,15 @@ import sys
 
 import pandas as pd
 from py2neo import Node, Relationship
-from py2neo.database import Transaction
+#from py2neo.database import Transaction
 from tqdm import tqdm
 
-from connection import populate_db
+
+from connection import populate_db,_add_nodes
 from constants import ENCODING, DATA_DIR
 
 #create a new database
-db_name = populate_db("protacv1")
+db_name,graph = populate_db("protacv1")
 
 #read protacdb with customized names
 
@@ -188,7 +189,7 @@ def createPtac(tx):
                                                         #"Hydrogen Bond Donor": hbdc, "Rotatable Bond": rbc,
                                                         ##"Source": f"https://doi.org/{source}"})
 
-        tx.create(node_dict["Protac"][protac])
+        #tx.create(node_dict["Protac"][protac])
 
     inchikeys = {val['InChI Key']: i for i, val in node_dict["Protac"].items()}
     print(inchikeys)
@@ -208,12 +209,13 @@ def createPtac(tx):
 
             node_dict["Protac"][inchikeys[inchikey]].update({"Cell": cell, "Status": status, "Ligand": ligname, "Linker Type": linkertype, "Off targets":offtar,"PubMed": pubmed})
             #node_dict["Protac"][protac]['Cell'] = cell
-            tx.graph.merge(node_dict["Protac"][inchikeys[inchikey]])
-            #new_node[property] = value
-            #node_dict[Protac] = ""
+            #tx.graph.merge(node_dict["Protac"][inchikeys[inchikey]])
+
             #node_dict["Protac"][protac]['Cell'] = cell
             #node_dict["Protac"][protac].push()
-            tx.graph.push(node_dict["Protac"][inchikeys[inchikey]])
+            #tx.graph.push(node_dict["Protac"][inchikeys[inchikey]])
+
+
 
 
         else:
@@ -221,9 +223,16 @@ def createPtac(tx):
                                                              "Ligand Name":ligname,"Linker Tyep":linkertype,"Hydrogen Bond Acceptor":hba,
                                                              "Hydrogen Bond Donor":hbd,"Off targets":offtar,"PubMed":pubmed})
 
-            tx.create(node_dict["Protac"][protac])
+            #tx.create(node_dict["Protac"][protac])
 
+    # Add also updated nodes into graph
+    for node_type in node_dict:
+        _add_nodes(
+            node_dict=node_dict[node_type],
+            tx=tx
+        )
 
+    return node_dict
     #3 pubchem
 
     #cols = ["cmpdname","cmpdsynonym","mw","mf","polararea","hbondacc","hbonddonor","rotbonds","inchi","inchikey","isosmiles","cid"]
@@ -399,5 +408,5 @@ getNodes = createPtac(db_name)
 
 #ppi_eu not used, need to be called in the function for creating nodes and relns
 #getRels = createRel(db_name,prodb_pchem_war,getNodes,warhead,ppi_eu)
-db_name.commit()
-
+#db_name.commit()
+graph.commit(db_name)
