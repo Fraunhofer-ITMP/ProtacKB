@@ -234,6 +234,50 @@ def createPtac(tx):
 
     return node_dict
 
+#fn to add proteins
+
+def createTarget(tx):
+
+    for target, uniprot in tqdm(ptacdb[["Target","Uniprot"]].values, total=ptacdb.shape[0]):
+
+        if target in node_dict["Protein"]:
+            continue
+        #add proteins in dictionary plus create a dictionary of metadata using **
+        node_dict["Protein"][target] = Node("Protein", **{"Protein":target,"Uniprot":uniprot,"Uniprot link":f"https://www.uniprot.org/uniprot/{uniprot}",
+                                                          "PubMed":f"https://pubmed.ncbi.nlm.nih.gov/?term={target}"})
+
+        if target in gene2disease_list:
+            #node_dict["Protein"][target] = Node("Protein", **{"Diseases": geneDiseaseMapping[target]})
+            node_dict["Protein"][target].update({"Diseases": gene2disease_list[target]})
+
+        if target in gene2drug:
+            node_dict["Protein"][target].update({"Drug&Class": gene2drug[target]})
+
+    for target, uniprot in tqdm(ptacpedia[["Gene_name","uniprotid"]].values, total=ptacpedia.shape[0]):
+
+        if target in node_dict["Protein"]:
+            continue
+
+        node_dict["Protein"][target] = Node("Protein", **{"Protein": target, "Uniprot": uniprot,
+                                                          "Uniprot link": f"https://www.uniprot.org/uniprot/{uniprot}",
+                                                          "PubMed": f"https://pubmed.ncbi.nlm.nih.gov/?term={target}"})
+
+        if target in gene2disease_list:
+            #node_dict["Protein"][target] = Node("Protein", **{"Diseases": geneDiseaseMapping[target]})
+            node_dict["Protein"][target].update({"Diseases": gene2disease_list[target]})
+
+        if target in gene2drug:
+            node_dict["Protein"][target].update({"Drug&Class": gene2drug[target]})
+
+    for node_type in node_dict:
+        _add_nodes(
+            node_dict=node_dict[node_type],
+            tx=tx
+        )
+
+    return node_dict
+
+
 #fn to add nodes
 def createNodes(tx,geneDiseaseMapping,drugInfo):
 
@@ -397,6 +441,7 @@ def createRel(tx,csvfile,passNode,warheadFile,ppiFile):
 
 
 getNodes = createPtac(db_name)
+getTarget = createTarget(db_name)
 
 #ppi_eu not used, need to be called in the function for creating nodes and relns
 #getRels = createRel(db_name,prodb_pchem_war,getNodes,warhead,ppi_eu)
