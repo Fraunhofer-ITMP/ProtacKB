@@ -509,26 +509,26 @@ def createReln(tx,ptacNode):
         #tx.create(targetTac)
         #tx.create(e3Target)
 
-    # for target, e3, ptac, linker in tqdm(ptacpedia[["Gene_name","E3 Ligase","ptac_name","Linker Type"]].values):
-    #     for protac in ptacNode["Protac"]:
-    #         print(ptac)
-    #         print(protac)
-    #
-    #         if ptac in ptacNode["Protac"][protac].values():
-    #
-    #             print(ptac)
-    #             e3Tac = Relationship(ptacNode["E3 ligase"][e3],"binds",ptacNode["Protac"][protac])
-    #             targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][protac], **{"E3 ligase":e3})
-    #
-    #         else:
-    #             e3Tac = Relationship(ptacNode["E3 ligase"][e3], "binds", ptacNode["Protac"][ptac])
-    #             targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][ptac], **{"E3 ligase": e3})
-    #
-    #     e3Target = Relationship(ptacNode["E3 ligase"][e3], 'ubiquitinates', ptacNode["Protein"][target])
-    #
-    #     tx.create(e3Tac)
-    #     tx.create(targetTac)
-    #     tx.create(e3Target)
+    for target, e3, ptac, linker in tqdm(ptacpedia[["Gene_name","E3 Ligase","ptac_name","Linker Type"]].values):
+        for protac in ptacNode["Protac"]:
+            print(ptac)
+            print(protac)
+
+            if ptac in ptacNode["Protac"][protac].values():
+
+                print(ptac)
+                e3Tac = Relationship(ptacNode["E3 ligase"][e3],"binds",ptacNode["Protac"][protac])
+                targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][protac], **{"E3 ligase":e3})
+
+            else:
+                e3Tac = Relationship(ptacNode["E3 ligase"][e3], "binds", ptacNode["Protac"][ptac])
+                targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][ptac], **{"E3 ligase": e3})
+
+        e3Target = Relationship(ptacNode["E3 ligase"][e3], 'ubiquitinates', ptacNode["Protein"][target])
+
+        tx.create(e3Tac)
+        tx.create(targetTac)
+        tx.create(e3Target)
 
 getPtac = createPtac(db_name)
 #print(getPtac)
