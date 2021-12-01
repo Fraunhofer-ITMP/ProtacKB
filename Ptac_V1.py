@@ -247,7 +247,8 @@ def createTarget(tx):
             continue
         #add proteins in dictionary plus create a dictionary of metadata using **
         node_dict["Protein"][target] = Node("Protein", **{"Protein":target,"Uniprot":uniprot,"Uniprot link":f"https://www.uniprot.org/uniprot/{uniprot}",
-                                                          "PubMed":f"https://pubmed.ncbi.nlm.nih.gov/?term={target}"})
+                                                          "PubMed":f"https://pubmed.ncbi.nlm.nih.gov/?term={target}",
+                                                          "ProteinsPlus":f"https://proteins.plus/{uniprot}"})
 
         if target in gene2disease_list:
             #node_dict["Protein"][target] = Node("Protein", **{"Diseases": geneDiseaseMapping[target]})
@@ -263,7 +264,8 @@ def createTarget(tx):
 
         node_dict["Protein"][target] = Node("Protein", **{"Protein": target, "Uniprot": uniprot,
                                                           "Uniprot link": f"https://www.uniprot.org/uniprot/{uniprot}",
-                                                          "PubMed": f"https://pubmed.ncbi.nlm.nih.gov/?term={target}"})
+                                                          "PubMed": f"https://pubmed.ncbi.nlm.nih.gov/?term={target}",
+                                                          "ProteinsPlus":f"https://proteins.plus/{uniprot}"})
 
         if target in gene2disease_list:
             #node_dict["Protein"][target] = Node("Protein", **{"Diseases": geneDiseaseMapping[target]})
@@ -535,27 +537,30 @@ getPtac = createPtac(db_name)
 getTarget = createTarget(db_name)
 getE3 = createE3(db_name)
 
-print("ProtacPd 790 731.723" in getPtac.values())
+#print("ProtacPd 790 731.723" in getPtac.values())
 
 #print(len(node_dict['Protac']))
 #print("ProtacPd 790 731.723" in node_dict["Protac"]["ProtacDB 1935 731.723"].values())
 #print(node_dict["Protac"]["ProtacDB 1935 731.723"]["ProtacPedia"])
 
-for protac in node_dict["Protac"]:
-    #print(node_dict["Protac"][protac].values())
-    #print(protac)
-    #break
-
-    if("ProtacPd 790 731.723") in node_dict["Protac"][protac].values():
-        print("Yes")
-        print(protac)
-        #break
-    #if node_dict["Protac"]["Protacpedia"][val] == 'ProtacPd 790 731.723':
-        #print(node_dict["Protac"][val])
+# for protac in node_dict["Protac"]:
+#     #print(node_dict["Protac"][protac].values())
+#     #print(protac)
+#     #break
+#
+#     if("ProtacPd 790 731.723") in node_dict["Protac"][protac].values():
+#         print("Yes")
+#         print(protac)
+#         #break
+#     #if node_dict["Protac"]["Protacpedia"][val] == 'ProtacPd 790 731.723':
+#         #print(node_dict["Protac"][val])
 
 #a= [k for k, v in node_dict["Protac"] if node_dict["Protac"] == "ProtacPd 590 953.176"]
 #print(a)
 
 #ppi_eu not used, need to be called in the function for creating nodes and relns
-#getRels = createReln(db_name,node_dict)
+getRels = createReln(db_name,node_dict)
 #graph.commit(db_name)
+if("ProtacDB 1935 731.723") in node_dict["Protac"]:
+    print("Yes")
+    #print(protac)
