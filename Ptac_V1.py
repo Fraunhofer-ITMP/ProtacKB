@@ -183,8 +183,8 @@ def createPtac(tx):
                                                         "Ring Count": rc,
                                                         "Hydrogen Bond Acceptor": hbac,
                                                         "Hydrogen Bond Donor": hbdc, "Rotatable Bond": rbc,
-                                                        "Source": f"https://doi.org/{source}"})
-                                                        #"Structure": f"https://molview.org/?q={smiles}"})
+                                                        "Source": f"https://doi.org/{source}",
+                                                        "Structure": f"https://molview.org/?q={smiles}"})
 
         #tx.create(node_dict["Protac"][protac])
 
@@ -200,14 +200,15 @@ def createPtac(tx):
         if inchikey in inchikeys:
 
 
-            node_dict["Protac"][inchikeys[inchikey]].update({"Cell": cell, "Status": status, "Ligand": ligname, "Linker Type": linkertype, "Off targets":offtar,"PubMed": pubmed,"ProtacPedia":protac})
+            node_dict["Protac"][inchikeys[inchikey]].update({"Cell": cell, "Status": status, "Ligand": ligname, "Linker Type": linkertype, "Off targets":offtar,
+                                                             "PubMed": f"https://pubmed.ncbi.nlm.nih.gov/?term={pubmed}","ProtacPedia":protac})
 
 
         else:
             node_dict["Protac"][protac] = Node("Protac", ** {"Protac":protac,"InChI Key":inchikey,"SMILES":smiles,"Cell":cell,"Status":status,
                                                              "Ligand Name":ligname,"Linker Type":linkertype,"Hydrogen Bond Acceptor":hba,
-                                                             "Hydrogen Bond Donor":hbd,"Off targets":offtar,"PubMed":pubmed})
-                                                             #"Structure": f"https://molview.org/?q={smiles}"})
+                                                             "Hydrogen Bond Donor":hbd,"Off targets":offtar,"PubMed":f"https://pubmed.ncbi.nlm.nih.gov/?term={pubmed}",
+                                                             "Structure": f"https://molview.org/?q={smiles}"})
 
             #tx.create(node_dict["Protac"][protac])
 
@@ -224,8 +225,8 @@ def createPtac(tx):
             node_dict["Protac"][protac] = Node("Protac", **{"Protac":protac, "Protac Synonym":ptacsyn,"InChI":inchi,"InChI Key":inchikey,
                                         "Smiles":smiles,"Molecular Weight":mw,"Molecular Formula":mf,"Ring Count":rc,
                                                         "Hydrogen Bond Acceptor Count":hba,"Hydrogen Bond Donor Count":hbd,"Rotatable Bond Count":rbc,
-                                                        "Compound":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}","Polar Surface area":polarea})
-                                                        #"Structure": f"https://molview.org/?q={smiles}"})
+                                                        "Compound":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}","Polar Surface area":polarea,
+                                                        "Structure": f"https://molview.org/?q={smiles}"})
 
 
     # Add also updated nodes into graph
@@ -565,7 +566,7 @@ createTarget(db_name)
 
 #ppi_eu not used, need to be called in the function for creating nodes and relns
 getRels = createReln(db_name,node_dict)
-#graph.commit(db_name)
+graph.commit(db_name)
 # if("ProtacPd 790 731.723") in node_dict["Protac"]:
 #     print("Yes it is ")
 # else:
