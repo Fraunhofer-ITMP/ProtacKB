@@ -518,7 +518,7 @@ def createReln(tx,ptacNode):
 
             if ptac in ptacNode["Protac"][protac].values():
 
-                print(ptac)
+                print("yes it is")
                 e3Tac = Relationship(ptacNode["E3 ligase"][e3],"binds",ptacNode["Protac"][protac])
                 targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][protac], **{"E3 ligase":e3})
 
