@@ -183,8 +183,8 @@ def createPtac(tx):
                                                         "Ring Count": rc,
                                                         "Hydrogen Bond Acceptor": hbac,
                                                         "Hydrogen Bond Donor": hbdc, "Rotatable Bond": rbc,
-                                                        "Source": f"https://doi.org/{source}",
-                                                        "Structure": f"https://molview.org/?q={smiles}"})
+                                                        "Source": f"https://doi.org/{source}"})
+                                                        #"Structure": f"https://molview.org/?q={smiles}"})
 
         #tx.create(node_dict["Protac"][protac])
 
@@ -206,7 +206,8 @@ def createPtac(tx):
         else:
             node_dict["Protac"][protac] = Node("Protac", ** {"Protac":protac,"InChI Key":inchikey,"SMILES":smiles,"Cell":cell,"Status":status,
                                                              "Ligand Name":ligname,"Linker Type":linkertype,"Hydrogen Bond Acceptor":hba,
-                                                             "Hydrogen Bond Donor":hbd,"Off targets":offtar,"PubMed":pubmed,"Structure": f"https://molview.org/?q={smiles}"})
+                                                             "Hydrogen Bond Donor":hbd,"Off targets":offtar,"PubMed":pubmed})
+                                                             #"Structure": f"https://molview.org/?q={smiles}"})
 
             #tx.create(node_dict["Protac"][protac])
 
@@ -223,7 +224,8 @@ def createPtac(tx):
             node_dict["Protac"][protac] = Node("Protac", **{"Protac":protac, "Protac Synonym":ptacsyn,"InChI":inchi,"InChI Key":inchikey,
                                         "Smiles":smiles,"Molecular Weight":mw,"Molecular Formula":mf,"Ring Count":rc,
                                                         "Hydrogen Bond Acceptor Count":hba,"Hydrogen Bond Donor Count":hbd,"Rotatable Bond Count":rbc,
-                                                        "Compound":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}","Polar Surface area":polarea,"Structure": f"https://molview.org/?q={smiles}"})
+                                                        "Compound":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}","Polar Surface area":polarea})
+                                                        #"Structure": f"https://molview.org/?q={smiles}"})
 
 
     # Add also updated nodes into graph
@@ -503,46 +505,57 @@ def createReln(tx,ptacNode):
         targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][ptac], **{"E3 ligase":e3})
         e3Target = Relationship(ptacNode["E3 ligase"][e3], 'ubiquitinates', ptacNode["Protein"][target])
 
-        tx.create(e3Tac)
-        tx.create(targetTac)
-        tx.create(e3Target)
+        #tx.create(e3Tac)
+        #tx.create(targetTac)
+        #tx.create(e3Target)
 
-
-def createRel(tx,csvfile,passNode,warheadFile,ppiFile):
-
-    for row in tqdm(csvfile[["cmpdname","E3 ligase","Target","Warhead_name"]].values):
-        (protac, e3, target,headwar) = row
-        e3Tac = Relationship(passNode["E3 ligase"][e3],'binds',passNode["Protac"][protac])
-        targetTac = Relationship(passNode["Protein"][target], 'binds', passNode["Protac"][protac], **{"E3 ligase":e3})
-        e3Target = Relationship(passNode["E3 ligase"][e3],'ubiquitinates',passNode["Protein"][target])
-        warPro = Relationship(passNode["Warhead"][headwar],'isApartOf',passNode["Protac"][protac])
-        warTar = Relationship(passNode["Warhead"][headwar], 'binds', passNode["Protein"][target])
-
-        tx.create(e3Tac)
-        tx.create(targetTac)
-        tx.create(e3Target)
-        tx.create(warPro)
-        tx.create(warTar)
-
-    # for name, target in tqdm(warheadFile[["Name","Target"]].values):
-    #     if target in passNode["Protein"]:
-    #         wheadTarget = Relationship(passNode["Warhead"][name],'binds',passNode["Protein"][target])
-    #         tx.create(wheadTarget)
-
-    # for p1, p2, ppiscore, phy_bgrid, gen_bgrid, string, pdbcomp in tqdm(ppiFile[["gene name1","gene name2","PPI Score","Phys_BioGRID",
-    #                              "Gen_BioGRID","string","PDB_complex"]].values):
+    # for target, e3, ptac, linker in tqdm(ptacpedia[["Gene_name","E3 Ligase","ptac_name","Linker Type"]].values):
+    #     for protac in ptacNode["Protac"]:
+    #         print(ptac)
+    #         print(protac)
     #
-    #     ppi = Relationship(passNode["Protein"][p1],'binds',passNode["Protein"][p2],
-    #                        **{"PPI score":ppiscore,"Physical Interaction Score (BioGRID)":phy_bgrid,
-    #                           "Genetic Interaction Score (BioGRID)":gen_bgrid,"String Score": string,"PDB complex":pdbcomp})
-    #     tx.create(ppi)
+    #         if ptac in ptacNode["Protac"][protac].values():
+    #
+    #             print(ptac)
+    #             e3Tac = Relationship(ptacNode["E3 ligase"][e3],"binds",ptacNode["Protac"][protac])
+    #             targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][protac], **{"E3 ligase":e3})
+    #
+    #         else:
+    #             e3Tac = Relationship(ptacNode["E3 ligase"][e3], "binds", ptacNode["Protac"][ptac])
+    #             targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][ptac], **{"E3 ligase": e3})
+    #
+    #     e3Target = Relationship(ptacNode["E3 ligase"][e3], 'ubiquitinates', ptacNode["Protein"][target])
+    #
+    #     tx.create(e3Tac)
+    #     tx.create(targetTac)
+    #     tx.create(e3Target)
 
-
-getNodes = createPtac(db_name)
+getPtac = createPtac(db_name)
+#print(getPtac)
 getTarget = createTarget(db_name)
 getE3 = createE3(db_name)
 
+print("ProtacPd 790 731.723" in getPtac.values())
+
+#print(len(node_dict['Protac']))
+#print("ProtacPd 790 731.723" in node_dict["Protac"]["ProtacDB 1935 731.723"].values())
+#print(node_dict["Protac"]["ProtacDB 1935 731.723"]["ProtacPedia"])
+
+for protac in node_dict["Protac"]:
+    #print(node_dict["Protac"][protac].values())
+    #print(protac)
+    #break
+
+    if("ProtacPd 790 731.723") in node_dict["Protac"][protac].values():
+        print("Yes")
+        print(protac)
+        #break
+    #if node_dict["Protac"]["Protacpedia"][val] == 'ProtacPd 790 731.723':
+        #print(node_dict["Protac"][val])
+
+#a= [k for k, v in node_dict["Protac"] if node_dict["Protac"] == "ProtacPd 590 953.176"]
+#print(a)
+
 #ppi_eu not used, need to be called in the function for creating nodes and relns
-getRels = createReln(db_name,getNodes)
-#db_name.commit()
-graph.commit(db_name)
+#getRels = createReln(db_name,node_dict)
+#graph.commit(db_name)
