@@ -507,24 +507,30 @@ def createReln(tx,ptacNode):
         targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][ptac], **{"E3 ligase":e3})
         e3Target = Relationship(ptacNode["E3 ligase"][e3], 'ubiquitinates', ptacNode["Protein"][target])
 
-        #tx.create(e3Tac)
-        #tx.create(targetTac)
-        #tx.create(e3Target)
+        tx.create(e3Tac)
+        tx.create(targetTac)
+        tx.create(e3Target)
 
     for target, e3, ptac, linker in tqdm(ptacpedia[["Gene_name","E3 Ligase","ptac_name","Linker Type"]].values):
-        for protac in ptacNode["Protac"]:
-            print(ptac)
-            print(protac)
+        #for protac in ptacNode["Protac"]:
+            #print(ptac)
+            #print(protac)
+            #
+            # if ptac in ptacNode["Protac"][protac].values():
+            #
+            #     print("yes it is")
+            #     print(protac)
+            #     break
 
-            if ptac in ptacNode["Protac"][protac].values():
+        if ptac in ptacNode["Protac"]:
+            e3Tac = Relationship(ptacNode["E3 ligase"][e3],"binds",ptacNode["Protac"][ptac])
+            targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][ptac], **{"E3 ligase":e3})
 
-                print("yes it is")
-                e3Tac = Relationship(ptacNode["E3 ligase"][e3],"binds",ptacNode["Protac"][protac])
-                targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][protac], **{"E3 ligase":e3})
-
-            else:
-                e3Tac = Relationship(ptacNode["E3 ligase"][e3], "binds", ptacNode["Protac"][ptac])
-                targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][ptac], **{"E3 ligase": e3})
+        else:
+            for protac in ptacNode["Protac"]:
+                if ptac in ptacNode["Protac"][protac].values():
+                    e3Tac = Relationship(ptacNode["E3 ligase"][e3], "binds", ptacNode["Protac"][protac])
+                    targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][protac], **{"E3 ligase": e3})
 
         e3Target = Relationship(ptacNode["E3 ligase"][e3], 'ubiquitinates', ptacNode["Protein"][target])
 
@@ -533,11 +539,10 @@ def createReln(tx,ptacNode):
         tx.create(e3Target)
 
 getPtac = createPtac(db_name)
-#print(getPtac)
-getTarget = createTarget(db_name)
-getE3 = createE3(db_name)
-
-#print("ProtacPd 790 731.723" in getPtac.values())
+createE3(db_name)
+createTarget(db_name)
+#a= [k for k in getPtac["Protac"]]
+#print(a[2600:])
 
 #print(len(node_dict['Protac']))
 #print("ProtacPd 790 731.723" in node_dict["Protac"]["ProtacDB 1935 731.723"].values())
@@ -561,6 +566,8 @@ getE3 = createE3(db_name)
 #ppi_eu not used, need to be called in the function for creating nodes and relns
 getRels = createReln(db_name,node_dict)
 #graph.commit(db_name)
-if("ProtacDB 1935 731.723") in node_dict["Protac"]:
-    print("Yes")
-    #print(protac)
+# if("ProtacPd 790 731.723") in node_dict["Protac"]:
+#     print("Yes it is ")
+# else:
+#     print("no")
+#     #print(protac)
