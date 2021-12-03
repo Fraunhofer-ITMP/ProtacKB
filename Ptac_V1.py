@@ -18,7 +18,7 @@ db_name,graph = populate_db("protacv1")
 #read protacdb with customized names
 
 ptacdb = pd.read_csv(
-    os.path.join(DATA_DIR,"protacdb_withnames.csv"),
+    os.path.join(DATA_DIR,"ptacdb_warhead.csv"),
     dtype=str,
     encoding=ENCODING
 )
@@ -91,21 +91,11 @@ gene2drug = dict(zip(geneNames_drugTarget,gene2drug))
 
 #print(gene2drug['CDK2'])
 
-#read file
-prodb_pchem = pd.read_csv(
-    os.path.join(DATA_DIR, "protacDB_pubchem.csv"),
-    dtype=str,
-    encoding=ENCODING
-    )
-
-#print(prodb_pchem.columns)
-#print(prodb_pchem.head(5))
-
-prodb_pchem_war = pd.read_csv(
-    os.path.join(DATA_DIR, "warhead_mapped2protac.csv"),
-    dtype=str,
-    encoding=ENCODING
-    )
+# prodb_pchem_war = pd.read_csv(
+#     os.path.join(DATA_DIR, "warhead_mapped2protac.csv"),
+#     dtype=str,
+#     encoding=ENCODING
+#     )
 
 warhead = pd.read_csv(
     os.path.join(DATA_DIR, "warhead.csv"),
@@ -368,149 +358,44 @@ def createE3(tx):
 
     return node_dict
 
+def createWarhead(tx):
+    warhead_cols = ["Name", "Smiles", "IC50 (nM)", "Assay (IC50)", "Molecular Formula", "Molecular Weight", "InChI Key",
+                    "InChI", "PubChem", "ChEMBL"]
 
-#fn to add nodes
-def createNodes(tx,geneDiseaseMapping,drugInfo):
-
-    #create dictionary of nodes
-    node_dict = {
-        'Protein': {},
-        'E3 ligase': {},
-        'Protac' : {},
-        'Warhead' : {}
-    }
-
-    #create protein nodes
-    for target, uniprot in tqdm(prodb_pchem[["Target","Uniprot"]].values, total=prodb_pchem.shape[0]):
-
-        if target in node_dict["Protein"]:
-            continue
-        #add proteins in dictionary plus create a dictionary of metadata using **
-        node_dict["Protein"][target] = Node("Protein", **{"Protein":target,"Uniprot":uniprot,"Uniprot link":f"https://www.uniprot.org/uniprot/{uniprot}",
-                                                          "PubMed":f"https://pubmed.ncbi.nlm.nih.gov/?term={target}"})
-
-        if target in geneDiseaseMapping:
-            #node_dict["Protein"][target] = Node("Protein", **{"Diseases": geneDiseaseMapping[target]})
-            node_dict["Protein"][target].update({"Diseases": geneDiseaseMapping[target]})
-
-        if target in drugInfo:
-            node_dict["Protein"][target].update({"Drug&Class": drugInfo[target]})
-
-        tx.create(node_dict["Protein"][target])
-
-
-    #create nodes for computed_ppi file
-
-    #prtn_cols = ["gene name1","Uniprot1","UniFun1","KEGG1","Uniloc1","Phob1","pdbmono1","gene name2", "Uniprot2", "UniFun2", "KEGG2", "Uniloc2", "Phob2", "pdbmono2"]
-    # prtn1_cols = ["gene name1", "Uniprot1", "UniFun1", "KEGG1", "Uniloc1", "Phob1", "pdb1"]
-    # prtn2_cols = ["gene name2", "Uniprot2", "UniFun2", "KEGG2", "Uniloc2", "Phob2", "pdb2"]
-    #
-    # for p1, uniprot1, unifun1, kegg1, uniloc1, phob1, pdb1 in tqdm(ppi_eu[prtn1_cols].values, total=ppi_eu.shape[0]):
-    #
-    #     if p1 in node_dict["Protein"]:
-    #         continue
-    #
-    #     node_dict["Protein"][p1] = Node("Protein", **{"Protein": p1, "Uniprot":uniprot1, "Uniprot link":f"https://www.uniprot.org/uniprot/{uniprot1}",
-    #                                                   "UniFun":unifun1,"Phob":phob1,"PDB":f"https://www.rcsb.org/structure/{pdb1}"})
-    #
-    #     tx.create(node_dict["Protein"][p1])
-    #
-    # for p2, uniprot2, unifun2, kegg2, uniloc2, phob2, pdb2 in tqdm(ppi_eu[prtn2_cols].values, total=ppi_eu.shape[0]):
-    #
-    #     if p2 in node_dict["Protein"]:
-    #         continue
-    #
-    #     node_dict["Protein"][p2] = Node("Protein", **{"Protein": p2, "Uniprot":uniprot2,"Uniprot link":f"https://www.uniprot.org/uniprot/{uniprot2}",
-    #                                                   "UniFun":unifun2,"Phob":phob2,"PDB":f"https://www.rcsb.org/structure/{pdb2}"})
-    #
-    #     tx.create(node_dict["Protein"][p2])
-
-    #create warhead nodes
-    warhead_cols = ["Name","Smiles","IC50 (nM)","Assay (IC50)","Molecular Formula","Molecular Weight","InChI Key","InChI","PubChem","ChEMBL"]
-
-    for whead, smiles, ic50, assay, mf, mw, inchikey, inchi, pubchem, chembl in tqdm(warhead[warhead_cols].values, total=warhead.shape[0]):
+    for whead, smiles, ic50, assay, mf, mw, inchikey, inchi, pubchem, chembl in tqdm(warhead[warhead_cols].values,
+                                                                                     total=warhead.shape[0]):
         if whead in node_dict["Warhead"]:
             continue
 
-        node_dict["Warhead"][whead] = Node("Warhead", **{"Warhead":whead, "Smiles":smiles,"IC 50":ic50,"Assay":assay,"Molecular Formula":mf,"Molecular Weight": mw,"InChI Key":inchikey,"InChI":inchi,
-                                    "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{pubchem}","ChEMBL":f"https://www.ebi.ac.uk/chembl/compound_report_card/{chembl}"})
+        node_dict["Warhead"][whead] = Node("Warhead",
+                                           **{"Warhead": whead, "Smiles": smiles, "IC 50": ic50, "Assay": assay,
+                                              "Molecular Formula": mf, "Molecular Weight": mw, "InChI Key": inchikey,
+                                              "InChI": inchi,
+                                              "PubChem": f"https://pubchem.ncbi.nlm.nih.gov/compound/{pubchem}",
+                                              "ChEMBL": f"https://www.ebi.ac.uk/chembl/compound_report_card/{chembl}"})
 
-        tx.create(node_dict["Warhead"][whead])
+    for node_type in node_dict:
+        _add_nodes(
+            node_dict=node_dict[node_type],
+            tx=tx
+        )
 
-    #create E3 ligase nodes
-    for e3 in tqdm(prodb_pchem["E3 ligase"].values, total=prodb_pchem.shape[0]):
-
-        if e3 in node_dict["E3 ligase"]:
-            continue
-
-        node_dict["E3 ligase"][e3] = Node("E3 ligase", **{"Name":e3})
-
-        #print(e3)
-
-        if e3 in ubinet_e3['E3'].values:
-            #print("Found")
-            #print(e3)
-            #print(e3 in ubinet_e3['E3'].index.values)
-            pos = ubinet_e3[ubinet_e3["E3"] == e3].index
-            #print(pos)
-
-            #print(pos[0])
-            #a = ubinet_e3.loc[[pos[0]]]
-            a = ubinet_e3.loc[pos,"Category"].values[0]
-            print(a)
-
-            #a=a['Category']
-            #print(a)
-
-            #print(a["Category"])
-            #print(ubinet_e3.loc[[pos[0]]])
-            node_dict["E3 ligase"][e3].update({"E3 Category": a})
-
-        if e3 in ubinet_e3_anno['Gene Name'].values:
-
-            pos = ubinet_e3_anno[ubinet_e3_anno["Gene Name"] == e3].index
-
-            seq = ubinet_e3_anno.loc[pos,"Sequence"].values[0]
-            func = ubinet_e3_anno.loc[pos,"Function [CC]"].values[0]
-            gomf = ubinet_e3_anno.loc[pos,"Gene ontology (molecular function)"].values[0]
-            gobp = ubinet_e3_anno.loc[pos,"Gene ontology (biological process)"].values[0]
-            gocc = ubinet_e3_anno.loc[pos,"Gene ontology (cellular component)"].values[0]
-
-            node_dict["E3 ligase"][e3].update({"Sequence": seq,"Function": func, "GO molecular function":gomf, "GO biological process": gobp,
-                                               "GO cellular component":gocc})
-
-
-        tx.create(node_dict["E3 ligase"][e3])
-
-    #create protac ligase nodes
-    cols = ["cmpdname","cmpdsynonym","InChI","InChI Key","Smiles","mw","mf",
-            "Heavy Atom Count","Ring Count","Hydrogen Bond Acceptor Count",
-            "Hydrogen Bond Donor Count","Rotatable Bond Count","Article DOI"]
-    for protac, protacsyn, inchi, inchikey, smiles, mw, mf, hac, rc, hbac, hbdc, rbc, source in tqdm(prodb_pchem[cols].values, total=prodb_pchem.shape[0]):
-        #(protac, protacsyn, inchi, inchikey, smiles, mw, mf, hac, rc, hbac, hbdc, rbc, source) = row
-        if protac in node_dict["Protac"]:
-            continue
-
-        node_dict["Protac"][protac] = Node("Protac", **{"Protac":protac, "Protac Synonym":protacsyn,"InChI":inchi,"InChI Key":inchikey,
-                                        "Smiles":smiles,"Molecular Weight":mw,"Molecular Formula":mf,"Hydrogen Atom Count":hac,"Ring Count":rc,
-                                                        "Hydrogen Bond Acceptor Count":hbac,"Hydrogen Bond Donor Count":hbdc,"Rotatable Bond Count":rbc,
-                                                        "Source":f"https://doi.org/{source}"})
-
-        tx.create(node_dict["Protac"][protac])
-
-
-    return(node_dict)
+    return node_dict
 
 def createReln(tx,ptacNode):
 
-    for target, e3, ptac in tqdm(ptacdb[["Target","E3 ligase","protac_name"]].values):
+    for target, e3, ptac, headwar in tqdm(ptacdb[["Target","E3 ligase","protac_name","Warhead_name"]].values):
         e3Tac = Relationship(ptacNode["E3 ligase"][e3],"binds",ptacNode["Protac"][ptac])
         targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][ptac], **{"E3 ligase":e3})
         e3Target = Relationship(ptacNode["E3 ligase"][e3], 'ubiquitinates', ptacNode["Protein"][target])
+        warPro = Relationship(ptacNode["Warhead"][headwar], 'isApartOf', ptacNode["Protac"][ptac])
+        warTar = Relationship(ptacNode["Warhead"][headwar], 'binds', ptacNode["Protein"][target])
 
         tx.create(e3Tac)
         tx.create(targetTac)
         tx.create(e3Target)
+        tx.create(warPro)
+        tx.create(warTar)
 
     for target, e3, ptac, linker in tqdm(ptacpedia[["Gene_name","E3 Ligase","ptac_name","Linker Type"]].values):
         #for protac in ptacNode["Protac"]:
@@ -542,6 +427,7 @@ def createReln(tx,ptacNode):
 getPtac = createPtac(db_name)
 createE3(db_name)
 createTarget(db_name)
+createWarhead(db_name)
 #a= [k for k in getPtac["Protac"]]
 #print(a[2600:])
 
