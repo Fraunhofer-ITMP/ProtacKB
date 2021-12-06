@@ -18,7 +18,7 @@ db_name,graph = populate_db("protacv1")
 #read protacdb with customized names
 
 ptacdb = pd.read_csv(
-    os.path.join(DATA_DIR,"ptacdb_warhead.csv"),
+    os.path.join(DATA_DIR,"PtacDBwithWheadnCID.csv"),
     dtype=str,
     encoding=ENCODING
 )
@@ -28,7 +28,7 @@ ptacdb = pd.read_csv(
 #read protacpedia with customized names
 
 ptacpedia = pd.read_csv(
-    os.path.join(DATA_DIR,"protacpd_withnames.csv"),
+    os.path.join(DATA_DIR,"PtacPDwithCID.csv"),
     dtype=str,
     encoding=ENCODING
 )
@@ -159,8 +159,8 @@ def createPtac(tx):
     #select columns and create a list of them
     cols = ["protac_name","InChI", "InChI Key", "Smiles", "Molecular Weight", "Molecular Formula",
             "Heavy Atom Count", "Ring Count", "Hydrogen Bond Acceptor Count",
-            "Hydrogen Bond Donor Count", "Rotatable Bond Count","Topological Polar Surface Area", "Article DOI"]
-    for protac, inchi, inchikey, smiles, mw, mf, hac, rc, hbac, hbdc, rbc,tpsa, source in tqdm(
+            "Hydrogen Bond Donor Count", "Rotatable Bond Count","Topological Polar Surface Area", "Article DOI","CID_pchem"]
+    for protac, inchi, inchikey, smiles, mw, mf, hac, rc, hbac, hbdc, rbc,tpsa, source,cid in tqdm(
             ptacdb[cols].values, total=ptacdb.shape[0]):
         # (protac, protacsyn, inchi, inchikey, smiles, mw, mf, hac, rc, hbac, hbdc, rbc, source) = row
         if protac in node_dict["Protac"]:
@@ -174,7 +174,8 @@ def createPtac(tx):
                                                         "Hydrogen Bond Acceptor": hbac,
                                                         "Hydrogen Bond Donor": hbdc, "Rotatable Bond": rbc,
                                                         "Source": f"https://doi.org/{source}",
-                                                        "Structure": f"https://molview.org/?q={smiles}"})
+                                                        "Structure": f"https://molview.org/?q={smiles}",
+                                                        "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}"})
 
         #tx.create(node_dict["Protac"][protac])
 
@@ -183,22 +184,25 @@ def createPtac(tx):
 
     #2 Protacpedia
     cols = ["ptac_name","InChI key","PROTAC SMILES","Cells","Active/Inactive","Ligand Name","Linker Type","Hbond acceptors",
-            "Hbond donors","Off Targets Reported","TPSA","Pubmed"]
+            "Hbond donors","Off Targets Reported","TPSA","Pubmed","Ligand PDB","CID_pchem"]
 
-    for protac, inchikey, smiles, cell, status, ligname, linkertype, hba, hbd, offtar, tpsa, pubmed in tqdm(ptacpedia[cols].values, total=ptacpedia.shape[0]):
+    for protac, inchikey, smiles, cell, status, ligname, linkertype, hba, hbd, offtar, tpsa, pubmed, ligpdb, cid in tqdm(ptacpedia[cols].values, total=ptacpedia.shape[0]):
 
         if inchikey in inchikeys:
 
 
             node_dict["Protac"][inchikeys[inchikey]].update({"Cell": cell, "Status": status, "Ligand": ligname, "Linker Type": linkertype, "Off targets":offtar,
-                                                             "PubMed": f"https://pubmed.ncbi.nlm.nih.gov/?term={pubmed}","ProtacPedia":protac})
+                                                             "PubMed": f"https://pubmed.ncbi.nlm.nih.gov/?term={pubmed}","ProtacPedia":protac,
+                                                             "Ligand PDB":f"https://www.rcsb.org/structure/{ligpdb}",
+                                                             "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}"})
 
 
         else:
             node_dict["Protac"][protac] = Node("Protac", ** {"Protac":protac,"InChI Key":inchikey,"SMILES":smiles,"Cell":cell,"Status":status,
                                                              "Ligand Name":ligname,"Linker Type":linkertype,"Hydrogen Bond Acceptor":hba,
                                                              "Hydrogen Bond Donor":hbd,"Off targets":offtar,"PubMed":f"https://pubmed.ncbi.nlm.nih.gov/?term={pubmed}",
-                                                             "Structure": f"https://molview.org/?q={smiles}"})
+                                                             "Structure": f"https://molview.org/?q={smiles}","Ligand PDB":f"https://www.rcsb.org/structure/{ligpdb}",
+                                                             "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}"})
 
             #tx.create(node_dict["Protac"][protac])
 
@@ -215,7 +219,7 @@ def createPtac(tx):
             node_dict["Protac"][protac] = Node("Protac", **{"Protac":protac, "Protac Synonym":ptacsyn,"InChI":inchi,"InChI Key":inchikey,
                                         "Smiles":smiles,"Molecular Weight":mw,"Molecular Formula":mf,"Ring Count":rc,
                                                         "Hydrogen Bond Acceptor Count":hba,"Hydrogen Bond Donor Count":hbd,"Rotatable Bond Count":rbc,
-                                                        "Compound":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}","Polar Surface area":polarea,
+                                                        "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}","Polar Surface area":polarea,
                                                         "Structure": f"https://molview.org/?q={smiles}"})
 
 
