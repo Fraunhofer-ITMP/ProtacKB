@@ -241,9 +241,11 @@ def createTarget(tx):
         if target in node_dict["Protein"]:
             continue
         #add proteins in dictionary plus create a dictionary of metadata using **
-        node_dict["Protein"][target] = Node("Protein", **{"Protein":target,"Uniprot":uniprot,"Uniprot link":f"https://www.uniprot.org/uniprot/{uniprot}",
+        node_dict["Protein"][target] = Node("Protein", **{"Protein":target,"Uniprot":uniprot,
+                                                          "Uniprot link":f"https://www.uniprot.org/uniprot/{uniprot}",
                                                           "PubMed":f"https://pubmed.ncbi.nlm.nih.gov/?term={target}",
-                                                          "ProteinsPlus":f"https://proteins.plus/{uniprot}"})
+                                                          "ProteinsPlus":f"https://proteins.plus/{uniprot}",
+                                                          "Alphafill":f"https://alphafill.eu/model?id={uniprot}"})
 
         if target in gene2disease_list:
             #node_dict["Protein"][target] = Node("Protein", **{"Diseases": geneDiseaseMapping[target]})
@@ -260,7 +262,8 @@ def createTarget(tx):
         node_dict["Protein"][target] = Node("Protein", **{"Protein": target, "Uniprot": uniprot,
                                                           "Uniprot link": f"https://www.uniprot.org/uniprot/{uniprot}",
                                                           "PubMed": f"https://pubmed.ncbi.nlm.nih.gov/?term={target}",
-                                                          "ProteinsPlus":f"https://proteins.plus/{uniprot}"})
+                                                          "ProteinsPlus":f"https://proteins.plus/{uniprot}",
+                                                          "Alphafill":f"https://alphafill.eu/model?id={uniprot}"})
 
         if target in gene2disease_list:
             #node_dict["Protein"][target] = Node("Protein", **{"Diseases": geneDiseaseMapping[target]})
