@@ -1,19 +1,18 @@
+import pandas as pd
 import getopt
 import os
 import random
 import sys
 
-import pandas as pd
 from py2neo import Node, Relationship
 #from py2neo.database import Transaction
 from tqdm import tqdm
-
 
 from connection import populate_db,_add_nodes
 from constants import ENCODING, DATA_DIR
 
 #create a new database
-db_name,graph = populate_db("protacv1")
+db_name,graph = populate_db("protacv2")
 
 #read protacdb with customized names
 
@@ -33,6 +32,8 @@ ptacpedia = pd.read_csv(
     encoding=ENCODING
 )
 #print(ptacpedia.columns)
+
+
 
 #read pubchemW
 pchem = pd.read_csv(
@@ -102,7 +103,7 @@ warhead = pd.read_csv(
     usecols= ["Name","Target","Smiles","IC50 (nM)","Assay (IC50)","Molecular Formula","Molecular Weight","InChI Key","InChI","PubChem","ChEMBL"],
     dtype=str,
     encoding=ENCODING
-)
+    )
 
 #remove rows with no names for warheads
 warhead = warhead[~warhead["Name"].isnull()]
@@ -175,7 +176,8 @@ def createPtac(tx):
                                                         "Hydrogen Bond Donor": hbdc, "Rotatable Bond": rbc,
                                                         "Source": f"https://doi.org/{source}",
                                                         "Structure": f"https://molview.org/?q={smiles}",
-                                                        "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}"})
+                                                        "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}",
+                                                        "2D-Structure":f"C:/Users/reagon.karki/PycharmProjects/ProtacKB/data/image/{protac}.png"})
 
         #tx.create(node_dict["Protac"][protac])
 
@@ -198,11 +200,12 @@ def createPtac(tx):
 
 
         else:
-            node_dict["Protac"][protac] = Node("Protac", ** {"Protac":protac,"InChI Key":inchikey,"SMILES":smiles,"Cell":cell,"Status":status,
+            node_dict["Protac"][protac] = Node("Protac", ** {"Protac":protac,"InChI Key":inchikey,"Smiles":smiles,"Cell":cell,"Status":status,
                                                              "Ligand Name":ligname,"Linker Type":linkertype,"Hydrogen Bond Acceptor":hba,
                                                              "Hydrogen Bond Donor":hbd,"Off targets":offtar,"PubMed":f"https://pubmed.ncbi.nlm.nih.gov/?term={pubmed}",
                                                              "Structure": f"https://molview.org/?q={smiles}","Ligand PDB":f"https://www.rcsb.org/structure/{ligpdb}",
-                                                             "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}"})
+                                                             "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}",
+                                                             "2D-Structure":f"C:/Users/reagon.karki/PycharmProjects/ProtacKB/data/image{protac}.png"})
 
             #tx.create(node_dict["Protac"][protac])
 
@@ -220,7 +223,8 @@ def createPtac(tx):
                                         "Smiles":smiles,"Molecular Weight":mw,"Molecular Formula":mf,"Ring Count":rc,
                                                         "Hydrogen Bond Acceptor Count":hba,"Hydrogen Bond Donor Count":hbd,"Rotatable Bond Count":rbc,
                                                         "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}","Polar Surface area":polarea,
-                                                        "Structure": f"https://molview.org/?q={smiles}"})
+                                                        "Structure": f"https://molview.org/?q={smiles}",
+                                                        "2D-Structure":f"C://Users/reagon.karki/PycharmProjects/ProtacKB/data/image{protac}.png"})
 
 
     # Add also updated nodes into graph
