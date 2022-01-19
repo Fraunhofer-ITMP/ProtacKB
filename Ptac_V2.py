@@ -428,7 +428,6 @@ def createReln(tx,ptacNode):
 def createGraph():
     # create a new database
     #db_name, graph = populate_db("protacv4")
-
     graph = Graph(
         FRAUNHOFER_URL,
         auth=(FRAUNHOFER_ADMIN_NAME, FRAUNHOFER_ADMIN_PASS),
