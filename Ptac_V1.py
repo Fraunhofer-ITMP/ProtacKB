@@ -12,7 +12,7 @@ from connection import populate_db,_add_nodes
 from constants import ENCODING, DATA_DIR
 
 #create a new database
-db_name,graph = populate_db("protacv2")
+db_name,graph = populate_db("ProtacKB_V1")
 
 #read protacdb with customized names
 

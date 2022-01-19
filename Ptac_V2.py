@@ -3,6 +3,9 @@ import getopt
 import os
 import random
 import sys
+from py2neo import Graph
+from constants import FRAUNHOFER_ADMIN_NAME, FRAUNHOFER_ADMIN_PASS, FRAUNHOFER_URL
+from constants import ADMIN_NAME, ADMIN_PASS, URL
 
 from py2neo import Node, Relationship
 #from py2neo.database import Transaction
@@ -424,9 +427,17 @@ def createReln(tx,ptacNode):
 
 def createGraph():
     # create a new database
-    db_name, graph = populate_db("protacv3")
+    #db_name, graph = populate_db("protacv4")
+
+    graph = Graph(
+        FRAUNHOFER_URL,
+        auth=(FRAUNHOFER_ADMIN_NAME, FRAUNHOFER_ADMIN_PASS),
+    )
+    db_name = graph.begin()
+    graph.delete_all()  # delete existing data
     getPtac = createNodes(db_name)
     getRels = createReln(db_name,getPtac)
     graph.commit(db_name)
+    return getPtac
 
 createGraph()
