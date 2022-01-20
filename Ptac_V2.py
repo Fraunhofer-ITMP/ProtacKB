@@ -5,7 +5,7 @@ import random
 import sys
 from py2neo import Graph
 from constants import FRAUNHOFER_ADMIN_NAME, FRAUNHOFER_ADMIN_PASS, FRAUNHOFER_URL
-from constants import ADMIN_NAME, ADMIN_PASS, URL
+#from constants import ADMIN_NAME, ADMIN_PASS, URL
 
 from py2neo import Node, Relationship
 #from py2neo.database import Transaction

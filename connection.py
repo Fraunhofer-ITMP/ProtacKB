@@ -5,12 +5,12 @@ import logging
 from py2neo import Graph, SystemGraph
 #from py2neo.database.work import ClientError
 
-from constants import ADMIN_NAME, ADMIN_PASS, URL
+from constants import FRAUNHOFER_ADMIN_NAME, FRAUNHOFER_ADMIN_PASS, FRAUNHOFER_URL
 
 logger = logging.getLogger()
 logging.basicConfig(level=logging.INFO)
 
-system_graph = SystemGraph(URL, auth=(ADMIN_NAME, ADMIN_PASS))
+system_graph = SystemGraph(FRAUNHOFER_URL, auth=(FRAUNHOFER_ADMIN_NAME, FRAUNHOFER_ADMIN_PASS))
 
 
 # def create_new_user():
