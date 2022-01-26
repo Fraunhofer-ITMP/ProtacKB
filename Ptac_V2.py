@@ -194,7 +194,7 @@ def createNodes(tx):
         if inchikey in inchikeys:
 
 
-            node_dict["Protac"][inchikeys[inchikey]].update({"Cell": cell, "Status": status, "Ligand": ligname, "Linker Type": linkertype, "Off targets":offtar,
+            node_dict["Protac"][inchikeys[inchikey]].update({"Status": status, "Ligand": ligname, "Linker Type": linkertype, "Off targets":offtar,
                                                              "PubMed": f"https://pubmed.ncbi.nlm.nih.gov/?term={pubmed}","ProtacPedia":protac,
                                                              "Ligand PDB":f"https://www.rcsb.org/structure/{ligpdb}",
                                                              "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}"})
@@ -389,7 +389,7 @@ def createReln(tx,ptacNode):
         targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][ptac], **{"E3 ligase":e3})
         e3Target = Relationship(ptacNode["E3 ligase"][e3], 'ubiquitinates', ptacNode["Protein"][target])
         warPro = Relationship(ptacNode["Warhead"][headwar], 'isApartOf', ptacNode["Protac"][ptac])
-        warTar = Relationship(ptacNode["Warhead"][headwar], 'binds', ptacNode["Protein"][target])
+        warTar = Relationship(ptacNode["Warhead"][headwar], 'targets', ptacNode["Protein"][target])
 
         tx.create(e3Tac)
         tx.create(targetTac)
