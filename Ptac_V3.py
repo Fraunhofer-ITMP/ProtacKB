@@ -54,7 +54,7 @@ def create_users(
 
     known_users = graph.run("SHOW USERS").to_series()
 
-    for idx in tqdm(df['UserName'].values):
+    for idx in tqdm(data_df['UserName'].values):
         idx = idx.split('-')[0]
 
         if idx in known_users.values:  # Omit already present users
@@ -62,7 +62,6 @@ def create_users(
 
         cypher = f"CREATE USER {idx} SET PASSWORD 'abc' CHANGE REQUIRED"
         graph.run(cypher)
-        break
 
     # Save user details
     data_df = data_df[['First Name', 'Last Name', 'UserName']]
@@ -503,6 +502,6 @@ def createGraph():
     #creating peronalized logins
     create_users(url=FRAUNHOFER_URL, name=FRAUNHOFER_ADMIN_NAME, password=FRAUNHOFER_ADMIN_PASS, data_df=data_df)
 
-    return getPtac
+    #return getPtac
 
 createGraph()
