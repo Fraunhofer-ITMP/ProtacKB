@@ -18,6 +18,12 @@ from tqdm import tqdm
 from connection import populate_db,_add_nodes
 from constants import ENCODING, DATA_DIR
 
+data_df = pd.read_csv(
+    os.path.join(DATA_DIR, "userdetails.csv"),
+    dtype=str,
+    encoding=ENCODING
+)
+
 
 def create_users(
     data_df: pd.DataFrame,
@@ -29,9 +35,9 @@ def create_users(
     graph = Graph(url, auth=(name, password), name='system')
 
     # Form the UserName of people
-    data_df['first_name'] = data_df['first_name'].map(lambda x: x.split()[0].split('-')[0].capitalize())
-    data_df['last_name'] = data_df['last_name'].map(lambda x: ''.join([i.capitalize() for i in x.split()]))
-    data_df['UserName'] = data_df['first_name'] + data_df['last_name']
+    data_df['First Name'] = data_df['First Name'].map(lambda x: x.split()[0].split('-')[0].capitalize())
+    data_df['Last Name'] = data_df['Last Name'].map(lambda x: ''.join([i.capitalize() for i in x.split()]))
+    data_df['UserName'] = data_df['First Name'] + data_df['Last Name']
 
     # Replace certain characters
     replace_char = {
@@ -40,10 +46,11 @@ def create_users(
         'í': 'i',
         "O'": 'o',
         'ø': 'o',
+        'ä' : 'ae'
     }
 
     for key, val in replace_char.items():
-        df['UserName'] = df['UserName'].str.replace(key, val)
+        data_df['UserName'] = data_df['UserName'].str.replace(key, val)
 
     known_users = graph.run("SHOW USERS").to_series()
 
@@ -55,12 +62,11 @@ def create_users(
 
         cypher = f"CREATE USER {idx} SET PASSWORD 'abc' CHANGE REQUIRED"
         graph.run(cypher)
+        break
 
     # Save user details
-    data_df = data_df[['first_name', 'last_name', 'UserName']]
-    data_df.to_csv(f'data/username_details.tsv', sep='\t', index=False)
-
-
+    data_df = data_df[['First Name', 'Last Name', 'UserName']]
+    data_df.to_csv(f'{DATA_DIR}/username_details_export.tsv', sep='\t', index=False)
 
 def createNodes(tx):
 
@@ -479,17 +485,24 @@ def createGraph():
         auth=(FRAUNHOFER_ADMIN_NAME, FRAUNHOFER_ADMIN_PASS),
     )
 
+    # Define the scope
+    #scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+
     # Add credentials to the account
-    creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
+    #creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
 
     # Authorize the clientsheet
-    client = gspread.authorize(creds)
+    #client = gspread.authorize(creds)
 
-    db_name = graph.begin()
-    graph.delete_all()  # delete existing data
-    getPtac = createNodes(db_name)
+    #db_name = graph.begin()
+    #graph.delete_all()  # delete existing data
+    #getPtac = createNodes(db_name)
     #getRels = createReln(db_name,getPtac)
-    graph.commit(db_name)
+    #graph.commit(db_name)
+
+    #creating peronalized logins
+    create_users(url=FRAUNHOFER_URL, name=FRAUNHOFER_ADMIN_NAME, password=FRAUNHOFER_ADMIN_PASS, data_df=data_df)
+
     return getPtac
 
 createGraph()
