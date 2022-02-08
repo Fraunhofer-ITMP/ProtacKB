@@ -1,89 +1,67 @@
-"Timestamp","Please confirm: I have read the ProxiDrugs Privacy Policy available at https://docs.google.com/document/d/1FqH1dpsmObGW89bDy0YxuataQypandTC/edit?usp=sharing&ouid=108897429871725865227&rtpof=true&sd=true and agree with it. ","First Name","Last Name","Email","Which institute/company are you affiliated with?","What project(s) are you involved in?"
-"2021/11/17 3:49:43 PM GMT+1","Yes","Reagon ","Karki","reagon.karki@itmp.fraunhofer.de","Fraunhofer ITMP","InnoDATA"
-"2021/11/17 5:25:35 PM GMT+1","Yes","Philip","Gribbobn","A@b.c","AbbVie Deutschland","AnitDEG"
-"2021/11/18 3:14:47 PM GMT+1","Yes","Maria","Riedel","riedel@med.uni-frankfurt.de","Goethe-Universität Frankfurt","InnoDATA"
-"2021/11/24 2:20:45 PM GMT+1","Yes","Philip","Gribbon","philip.gribbon@itmp.fraunhofer.de","Fraunhofer ITMP","AntiDEG;AltTAC;InnoDATA;ProxiDETECT"
-"2021/11/24 2:22:18 PM GMT+1","Yes","Henry","Bailey","henry.bailey@kgu.de","Goethe-Universität Frankfurt","iGLUE;NewPRO"
-"2021/11/24 2:22:30 PM GMT+1","Yes","Ole","Pless","ole.pless@itmp.fraunhofer.de","Fraunhofer ITMP","AntiDEG;AltTAC;BioDEL;ProxiDETECT"
-"2021/11/24 2:23:49 PM GMT+1","Yes","Aimo","Kannt","aimo.kannt@itmp.fraunhofer.de","Fraunhofer ITMP","AntiDEG;AltTAC;InnoDATA;ProxiDETECT"
-"2021/11/24 2:24:10 PM GMT+1","Yes","Andrea","Zaliani","andrea.zaliani@itmp.fraunhofer.de","Fraunhofer ITMP","AntiDEG;InnoDATA;BioDEL;ProxiDETECT"
-"2021/11/24 2:25:00 PM GMT+1","Yes","Mario","Mezler","mario.mezler@abbvie.de","AbbVie Deutschland","BioDEL"
-"2021/11/24 2:30:51 PM GMT+1","Yes","Volkhard","Kempf","volkhard.kempf@kgu.de","Goethe-Universität Frankfurt","AntiMIC"
-"2021/11/24 2:39:15 PM GMT+1","Yes","Diana","Vaca","diana.vaca@kgu.de","Goethe-Universität Frankfurt","AntiMIC"
-"2021/11/24 2:39:58 PM GMT+1","Yes","Yi-Lin","Cheng","Cheng@med.uni-frankfurt.de","Goethe-Universität Frankfurt","AntiMIC"
-"2021/11/24 2:50:17 PM GMT+1","Yes","Dieter","Steinhilber","steinhilber@em.uni-frankfurt.de","Fraunhofer ITMP","AltTAC"
-"2021/11/24 2:52:17 PM GMT+1","Yes","Simon","Wöhrle","simon.woehrle@merckgroup.com","Merck Group","NewPRO;ProxiTRAPS"
-"2021/11/24 3:00:41 PM GMT+1","Yes","Stefan","Knapp","knapp@pharmchem.uni-frankfurt.de","Goethe-Universität Frankfurt","AntiCAN;iGLUE;NewPRO;ProxiTRAPS"
-"2021/11/24 3:04:09 PM GMT+1","Yes","Sebastian","Mathea","sebastianmathea.kinase@gmail.com","Goethe-Universität Frankfurt","AntiCAN"
-"2021/11/24 3:09:41 PM GMT+1","Yes","Alexandra","Stolz","stolz@em.uni-frankfurt.de","Goethe-Universität Frankfurt","AntiMIC;AntiCAN"
-"2021/11/24 3:09:57 PM GMT+1","Yes","Arghya","Dutta","A.Dutta@med.uni-frankfurt.de","Goethe-Universität Frankfurt","InnoDATA"
-"2021/11/24 3:28:19 PM GMT+1","Yes","Manuel","Kaulich","kaulich@em.uni-frankfurt.de","Goethe-Universität Frankfurt","InnoTECH"
-"2021/11/24 3:31:12 PM GMT+1","Yes","Jan","Keine-Schmitz","keiten-schmitz@em.uni-frankfurt.de","Goethe-Universität Frankfurt","AltTAC"
-"2021/11/24 3:32:01 PM GMT+1","Yes","Marcel","Heinz","marcel.heinz@biophys.mpg.de","Max-Planck-Institut für Biophysik","InnoTECH;NewPRO"
-"2021/11/24 3:42:29 PM GMT+1","Yes","Daniela","Prof. Dr. Krause","krause@gsh.uni-frankfurt.de","Goethe-Universität Frankfurt","AntiCAN"
-"2021/11/24 3:58:36 PM GMT+1","Yes","Volker","Eckelt","Volker.Eckelt@PERKINELMER.COM","PerkinElmer","ProxiDETECT"
-"2021/11/24 4:40:46 PM GMT+1","Yes","Kamal Rayees","Abdul Azeez","kamaal010@gmail.com","Goethe-Universität Frankfurt","AntiCAN"
-"2021/11/24 5:40:27 PM GMT+1","Yes","Markus","Queisser","markus.a.queisser@gsk.com","GlaxoSmithKline","ProxiDETECT"
-"2021/11/25 11:16:38 AM GMT+1","Yes","Michael","Mathieu","michael.mathieu@perkinelmer.com","PerkinElmer","ProxiDETECT"
-"2021/11/25 11:33:51 AM GMT+1","Yes","Peter","Stacey","peter.x.stacey@gsk.com","GlaxoSmithKline","ProxiDETECT"
-"2021/11/25 1:12:14 PM GMT+1","Yes","Kerstin","Koch","k.koch@em.uni-frankfurt.de","Goethe-Universität Frankfurt","InnoDATA"
-"2021/11/25 2:49:44 PM GMT+1","Yes","Sarah","Vogel-Kindgen","vogel-kindgen@em.uni-frankfurt.de","Goethe-Universität Frankfurt","InnoTECH;BioDEL"
-"2021/11/25 5:42:38 PM GMT+1","Yes","Alexander","Loewer","loewer@bio.tu-darmstadt.de","Technische Universität Darmstadt","ProxiTRAPS"
-"2021/11/25 7:01:01 PM GMT+1","Yes","Mira","Graettinger","mira.graettinger@itmp.fraunhofer.de","Fraunhofer ITMP","InnoDATA"
-"2021/11/26 1:16:51 PM GMT+1","Yes","Hassan","Elsafty","Hassan.elsafty@hotmail.com","Goethe-Universität Frankfurt","AntiMIC;AntiCAN"
-"2021/11/29 2:28:50 PM GMT+1","Yes","Varun Jayeshkumar","Shah","shah@med.uni-frankfurt.de","Goethe-Universität Frankfurt","iGLUE"
-"2021/12/01 12:13:13 PM GMT+1","Yes","Yojana","Gadiya","Yojana.Gadiya@itmp.fraunhofer.de","Fraunhofer ITMP","InnoDATA"
-"2021/12/01 12:51:04 PM GMT+1","Yes","Undine","Haferkamp","undine.haferkamp@itmp.fraunhofer.de","Fraunhofer ITMP","AntiDEG;AltTAC;BioDEL;ProxiDETECT"
-"2021/12/01 1:08:04 PM GMT+1","Yes","Gesa","Witt","Gesa.Witt@itmp.fraunhofer.de","Fraunhofer ITMP","AntiDEG;AltTAC;InnoDATA;BioDEL;ProxiDETECT"
-"2021/12/01 1:45:48 PM GMT+1","Yes","Sheraz","Gul","Sheraz.Gul@itmp.fraunhofer.de","Fraunhofer ITMP","AntiDEG;AltTAC;InnoDATA;BioDEL;ProxiDETECT"
-"2021/12/01 3:32:04 PM GMT+1","Yes","reagon ","karki","reagonkarki@gmail.com","Fraunhofer ITMP","InnoDATA"
-"2021/12/01 3:41:52 PM GMT+1","Yes","Varun","Shah","shahvarun28@gmail.com","Goethe-Universität Frankfurt","iGLUE"
-"2021/12/03 6:06:44 PM GMT+1","Yes","Viktor","Lakics","viktor.lakics@abbvie.com","AbbVie Deutschland","AntiDEG;ProxiDETECT"
-"2021/12/06 11:36:29 AM GMT+1","Yes","Sebastian","Mathea","sebastianmathea.kinase@gmail.com","Goethe-Universität Frankfurt","AntiCAN"
-"2021/12/06 11:36:36 AM GMT+1","Yes","Dieter","Steinhilber","steinhilber@em.uni-frankfurt.de","Fraunhofer ITMP","AltTAC"
-"2021/12/06 11:36:49 AM GMT+1","Yes","Volkhard","Kempf","volkhard.kempf@kgu.de","Goethe-Universität Frankfurt","AntiMIC"
-"2021/12/06 11:36:53 AM GMT+1","Yes","Birgitta","Leuthner","birgitta.leuthner@merckgroup.com","Merck Group","ProxiTRAPS"
-"2021/12/06 11:37:35 AM GMT+1","Yes","Volker","Eckelt","Volker.Eckelt@PERKINELMER.COM","PerkinElmer","ProxiDETECT"
-"2021/12/06 11:40:10 AM GMT+1","Yes","Ramachandra M","Bhaskara","bhaskara@med.uni-frankfurt.de","Goethe-Universität Frankfurt","InnoTECH;InnoDATA"
-"2021/12/06 11:42:22 AM GMT+1","Yes","Georg","Tascher","tascher@med.uni-frankfurt.de","Goethe-Universität Frankfurt","AntiMIC;iGLUE;InnoTECH"
-"2021/12/06 11:45:57 AM GMT+1","Yes","Xinlai","Cheng","cheng@pharmchem.uni-frankfurt.de","Goethe-Universität Frankfurt","iGLUE"
-"2021/12/06 11:49:42 AM GMT+1","Yes","Aimo","Kannt","aimo.kannt@itmp.fraunhofer.de","Fraunhofer ITMP","AntiDEG;AltTAC;InnoDATA;ProxiDETECT"
-"2021/12/06 11:50:48 AM GMT+1","Yes","Ingo","Hartung","ingo.hartung@merckgroup.com","Merck Group","BioDEL;NewPRO;ProxiTRAPS"
-"2021/12/06 11:59:27 AM GMT+1","Yes","Giulio","Giuliani","giuliani@med.uni-frankfurt.de","Goethe-Universität Frankfurt","AntiCAN"
-"2021/12/06 12:03:03 PM GMT+1","Yes","Mario","Mezler","mario.mezler@abbvie.com","AbbVie Deutschland","BioDEL"
-"2021/12/06 12:18:01 PM GMT+1","Yes","Daniel","Schäfer","danielschaefer2005@hotmail.de","Goethe-Universität Frankfurt","iGLUE"
-"2021/12/06 12:25:30 PM GMT+1","Yes","Stefan","Müller","ste.mueller@em.uni-frankfurt.de","Goethe-Universität Frankfurt","AltTAC"
-"2021/12/06 12:54:16 PM GMT+1","Yes","Kevin","Klann","klann@em.uni-frankfurt.de","Goethe-Universität Frankfurt","InnoDATA"
-"2021/12/06 1:10:59 PM GMT+1","Yes","Felix","Hausch","felix.hausch@zu-darmstadt.de","Technische Universität Darmstadt","iGLUE;NewPRO;ProxiTRAPS;ProxiDETECT"
-"2021/12/06 1:28:01 PM GMT+1","Yes","Ivan","Dikic","dikic@biochem2.uni-frankfurt.de","Goethe-Universität Frankfurt","AntiMIC;iGLUE"
-"2021/12/06 1:34:43 PM GMT+1","Yes","Andrea","Zaliani","andrea.zaliani@itmp.fraunhofer.de","Fraunhofer ITMP","AntiDEG;InnoDATA;ProxiDETECT"
-"2021/12/06 1:38:39 PM GMT+1","Yes","Christian","Münch","ch.muench@em.uni-frankfurt.de","Goethe-Universität Frankfurt","AntiDEG;AltTAC;InnoTECH"
-"2021/12/06 1:39:44 PM GMT+1","Yes","Yves","Matthess","yves.matthess@kgu.de","Goethe-Universität Frankfurt","InnoTECH"
-"2021/12/06 2:16:55 PM GMT+1","Yes","Andrew","Benowitz","andrew.b.benowitz@gsk.com","GlaxoSmithKline","ProxiDETECT"
-"2021/12/06 4:38:07 PM GMT+1","Yes","Daniela","Prof. Dr. Krause","krause@gsh.uni-frankfurt.de","Goethe-Universität Frankfurt","AntiCAN"
-"2021/12/07 1:01:26 AM GMT+1","Yes","Ivan","Dikic","dikic@biochem2.uni-frankfurt.de","Goethe-Universität Frankfurt","AntiMIC;AntiCAN;iGLUE;NewPRO"
-"2021/12/10 11:48:30 AM GMT+1","Yes","Holger","Kubas","holger.kubas@merckgroup.com","Merck Group","BioDEL"
-"2021/12/10 11:49:10 AM GMT+1","Yes","Ansgar","Wegener","ansgar.wegener@merckgroup.com","Merck Group","NewPRO;ProxiTRAPS"
-"2021/12/10 12:55:02 PM GMT+1","Yes","Johannes","Krieger","johannes.krieger@merckgroup.com","Merck Group","NewPRO;ProxiTRAPS"
-"2021/12/10 1:01:57 PM GMT+1","Yes","Fiona","Sorrell","fiona.sorrell@merckgroup.com","Merck Group","NewPRO;ProxiTRAPS"
-"2021/12/10 2:30:46 PM GMT+1","Yes","Paul","Gehrtz","paul.gehrtz@merckgroup.com","Merck Group","NewPRO;ProxiTRAPS"
-"2021/12/17 3:39:28 PM GMT+1","Yes","Volkhard","Kempf","volkhard.kempf@kgu.de","Goethe-Universität Frankfurt","AntiMIC"
-"2021/12/17 10:13:20 PM GMT+1","Yes","Ramachandra M","Bhaskara","bhaskara@med.uni-frankfurt.de","Goethe-Universität Frankfurt","InnoTECH;InnoDATA"
-"2021/12/30 12:25:44 PM GMT+1","Yes","Manuel","Kaulich","kaulich@em.uni-frankfurt.de","Goethe-Universität Frankfurt","InnoTECH"
-"2021/12/30 12:52:54 PM GMT+1","Yes","Alexandra","Stolz","stolz@em.uni-frankfurt.de","Goethe-Universität Frankfurt","AntiMIC;AntiCAN"
-"2021/12/30 5:46:58 PM GMT+1","Yes","Arghya","Dutta","A.Dutta@med.uni-frankfurt.de ","Goethe-Universität Frankfurt","InnoDATA"
-"2022/01/03 7:06:12 AM GMT+1","Yes","Rajeshwari","Rathore","rathore@em.uni-frankfurt.de","Goethe-Universität Frankfurt","iGLUE"
-"2022/01/03 10:28:47 AM GMT+1","Yes","Ramachandra","Bhaskara","bhaskara@med.uni-frankfurt.de","Goethe-Universität Frankfurt","InnoTECH;InnoDATA"
-"2022/01/06 6:16:43 PM GMT+1","Yes","Johanna","Huchting","johanna.huchting@itmp.fraunhofer.de","Fraunhofer ITMP","AntiDEG;ProxiDETECT"
-"2022/01/11 2:32:17 PM GMT+1","Yes","Hung Xuan","Ho","Ho@med-unifrankfurt.de","Goethe-Universität Frankfurt","AntiMIC;AntiCAN"
-"2022/01/11 3:31:05 PM GMT+1","Yes","Harald","Kolmar","Kolmar@Biochemie-TUD.de","Technische Universität Darmstadt","ProxiTRAPS"
-"2022/01/11 3:54:50 PM GMT+1","Yes","Harald","Kolmar","Kolmar@Biochemie-TUD.de","Technische Universität Darmstadt","ProxiTRAPS"
-"2022/01/11 3:59:06 PM GMT+1","Yes","Michael","Walz","michael.walz@tu-darmstadt.de","Technische Universität Darmstadt","ProxiTRAPS"
-"2022/01/11 4:49:09 PM GMT+1","Yes","Harald","Kolmar","Kolmar@Biochemie-TUD.de","Technische Universität Darmstadt","ProxiTRAPS"
-"2022/01/11 4:53:21 PM GMT+1","Yes","Harald","Kolmar","Harald.Kolmar@TU-Darmstadt.de","Technische Universität Darmstadt","ProxiTRAPS"
-"2022/01/12 10:27:04 AM GMT+1","Yes","Magnus","Walter","magnus.walter@abbvie.com","AbbVie Deutschland","AntiDEG;BioDEL;ProxiDETECT"
-"2022/01/12 12:59:24 PM GMT+1","Yes","Simon","Woehrle","simon.woehrle@merckgroup.com","Merck Group","NewPRO;ProxiTRAPS"
-"2022/01/13 3:03:51 PM GMT+1","Yes","Robin","Deutscher","robin.deutscher@tu-darmstadt.de","Technische Universität Darmstadt","ProxiDETECT"
-"2022/01/14 9:55:52 AM GMT+1","Yes","Melanie","Meister","melanie.meister@abbvie.com","AbbVie Deutschland","AntiDEG;ProxiDETECT"
-"2022/01/14 10:50:39 AM GMT+1","Yes","Lydia","Reinhardt","lydia.reinhardt@abbvie.com","AbbVie Deutschland","AntiDEG;ProxiDETECT"
-"2022/01/14 3:53:48 PM GMT+1","Yes","Ingo","Hartung","ingo.hartung@merckgroup.com","Merck Group","BioDEL;NewPRO;ProxiTRAPS"
+Timestamp,Please confirm: I have read the ProxiDrugs Privacy Policy available at https://docs.google.com/document/d/1FqH1dpsmObGW89bDy0YxuataQypandTC/edit?usp=sharing&ouid=108897429871725865227&rtpof=true&sd=true and agree with it. ,First Name,Last Name,Email,Which institute/company are you affiliated with?,What project(s) are you involved in?
+2021/12/06 11:49:42 AM GMT+1,Yes,Aimo,Kannt,aimo.kannt@itmp.fraunhofer.de,Fraunhofer ITMP,AntiDEG;AltTAC;InnoDATA;ProxiDETECT
+2021/11/25 5:42:38 PM GMT+1,Yes,Alexander,Loewer,loewer@bio.tu-darmstadt.de,Technische Universität Darmstadt,ProxiTRAPS
+2021/12/30 12:52:54 PM GMT+1,Yes,Alexandra,Stolz,stolz@em.uni-frankfurt.de,Goethe-Universität Frankfurt,AntiMIC;AntiCAN
+2021/11/24 2:24:10 PM GMT+1,Yes,Andrea,Zaliani,andrea.zaliani@itmp.fraunhofer.de,Fraunhofer ITMP,AntiDEG;InnoDATA;BioDEL;ProxiDETECT
+2021/12/06 2:16:55 PM GMT+1,Yes,Andrew,Benowitz,andrew.b.benowitz@gsk.com,GlaxoSmithKline,ProxiDETECT
+2021/12/10 11:49:10 AM GMT+1,Yes,Ansgar,Wegener,ansgar.wegener@merckgroup.com,Merck Group,NewPRO;ProxiTRAPS
+2021/11/24 3:09:57 PM GMT+1,Yes,Arghya,Dutta,A.Dutta@med.uni-frankfurt.de,Goethe-Universität Frankfurt,InnoDATA
+2021/12/06 11:36:53 AM GMT+1,Yes,Birgitta,Leuthner,birgitta.leuthner@merckgroup.com,Merck Group,ProxiTRAPS
+2021/12/06 1:38:39 PM GMT+1,Yes,Christian,Muench,ch.muench@em.uni-frankfurt.de,Goethe-Universität Frankfurt,AntiDEG;AltTAC;InnoTECH
+2022/02/03 10:20:26 AM GMT+1,Yes,Cristian ,Prieto-Garcia,cristian.prieto.garcia@gmail.com,Goethe-Universität Frankfurt,AntiCAN;iGLUE
+2021/12/06 12:18:01 PM GMT+1,Yes,Daniel,Schaefer,danielschaefer2005@hotmail.de,Goethe-Universität Frankfurt,iGLUE
+2021/11/24 3:42:29 PM GMT+1,Yes,Daniela,Krause,krause@gsh.uni-frankfurt.de,Goethe-Universität Frankfurt,AntiCAN
+2021/11/24 2:39:15 PM GMT+1,Yes,Diana,Vaca,diana.vaca@kgu.de,Goethe-Universität Frankfurt,AntiMIC
+2021/11/24 2:50:17 PM GMT+1,Yes,Dieter,Steinhilber,steinhilber@em.uni-frankfurt.de,Fraunhofer ITMP,AltTAC
+2021/12/06 1:10:59 PM GMT+1,Yes,Felix,Hausch,felix.hausch@zu-darmstadt.de,Technische Universität Darmstadt,iGLUE;NewPRO;ProxiTRAPS;ProxiDETECT
+2021/12/10 1:01:57 PM GMT+1,Yes,Fiona,Sorrell,fiona.sorrell@merckgroup.com,Merck Group,NewPRO;ProxiTRAPS
+2021/12/06 11:42:22 AM GMT+1,Yes,Georg,Tascher,tascher@med.uni-frankfurt.de,Goethe-Universität Frankfurt,AntiMIC;iGLUE;InnoTECH
+2021/12/01 1:08:04 PM GMT+1,Yes,Gesa,Witt,Gesa.Witt@itmp.fraunhofer.de,Fraunhofer ITMP,AntiDEG;AltTAC;InnoDATA;BioDEL;ProxiDETECT
+2021/12/06 11:59:27 AM GMT+1,Yes,Giulio,Giuliani,giuliani@med.uni-frankfurt.de,Goethe-Universität Frankfurt,AntiCAN
+2022/01/11 3:31:05 PM GMT+1,Yes,Harald,Kolmar,Kolmar@Biochemie-TUD.de,Technische Universität Darmstadt,ProxiTRAPS
+2021/11/26 1:16:51 PM GMT+1,Yes,Hassan,Elsafty,Hassan.elsafty@hotmail.com,Goethe-Universität Frankfurt,AntiMIC;AntiCAN
+2021/11/24 2:22:18 PM GMT+1,Yes,Henry,Bailey,henry.bailey@kgu.de,Goethe-Universität Frankfurt,iGLUE;NewPRO
+2021/12/10 11:48:30 AM GMT+1,Yes,Holger,Kubas,holger.kubas@merckgroup.com,Merck Group,BioDEL
+2022/01/11 2:32:17 PM GMT+1,Yes,Hung,Ho,Ho@med-unifrankfurt.de,Goethe-Universität Frankfurt,AntiMIC;AntiCAN
+2021/12/06 11:50:48 AM GMT+1,Yes,Ingo,Hartung,ingo.hartung@merckgroup.com,Merck Group,BioDEL;NewPRO;ProxiTRAPS
+2021/12/07 1:01:26 AM GMT+1,Yes,Ivan,Dikic,dikic@biochem2.uni-frankfurt.de,Goethe-Universität Frankfurt,AntiMIC;AntiCAN;iGLUE;NewPRO
+2021/11/24 3:31:12 PM GMT+1,Yes,Jan,Keine-Schmitz,keiten-schmitz@em.uni-frankfurt.de,Goethe-Universität Frankfurt,AltTAC
+2022/01/06 6:16:43 PM GMT+1,Yes,Johanna,Huchting,johanna.huchting@itmp.fraunhofer.de,Fraunhofer ITMP,AntiDEG;ProxiDETECT
+2021/12/10 12:55:02 PM GMT+1,Yes,Johannes,Krieger,johannes.krieger@merckgroup.com,Merck Group,NewPRO;ProxiTRAPS
+2021/11/24 4:40:46 PM GMT+1,Yes,Kamal,Abdul,kamaal010@gmail.com,Goethe-Universität Frankfurt,AntiCAN
+2021/11/25 1:12:14 PM GMT+1,Yes,Kerstin,Koch,k.koch@em.uni-frankfurt.de,Goethe-Universität Frankfurt,InnoDATA
+2021/12/06 12:54:16 PM GMT+1,Yes,Kevin,Klann,klann@em.uni-frankfurt.de,Goethe-Universität Frankfurt,InnoDATA
+2022/01/14 10:50:39 AM GMT+1,Yes,Lydia,Reinhardt,lydia.reinhardt@abbvie.com,AbbVie Deutschland,AntiDEG;ProxiDETECT
+2022/01/12 10:27:04 AM GMT+1,Yes,Magnus,Walter,magnus.walter@abbvie.com,AbbVie Deutschland,AntiDEG;BioDEL;ProxiDETECT
+2021/11/24 3:28:19 PM GMT+1,Yes,Manuel,Kaulich,kaulich@em.uni-frankfurt.de,Goethe-Universität Frankfurt,InnoTECH
+2021/11/24 3:32:01 PM GMT+1,Yes,Marcel,Heinz,marcel.heinz@biophys.mpg.de,Max-Planck-Institut für Biophysik,InnoTECH;NewPRO
+2021/11/18 3:14:47 PM GMT+1,Yes,Maria,Riedel,riedel@med.uni-frankfurt.de,Goethe-Universität Frankfurt,InnoDATA
+2021/11/24 2:25:00 PM GMT+1,Yes,Mario,Mezler,mario.mezler@abbvie.de,AbbVie Deutschland,BioDEL
+2021/11/24 5:40:27 PM GMT+1,Yes,Markus,Queisser,markus.a.queisser@gsk.com,GlaxoSmithKline,ProxiDETECT
+2022/01/14 9:55:52 AM GMT+1,Yes,Melanie,Meister,melanie.meister@abbvie.com,AbbVie Deutschland,AntiDEG;ProxiDETECT
+2021/11/25 11:16:38 AM GMT+1,Yes,Michael,Mathieu,michael.mathieu@perkinelmer.com,PerkinElmer,ProxiDETECT
+2022/01/11 3:59:06 PM GMT+1,Yes,Michael,Walz,michael.walz@tu-darmstadt.de,Technische Universität Darmstadt,ProxiTRAPS
+2021/11/25 7:01:01 PM GMT+1,Yes,Mira,Graettinger,mira.graettinger@itmp.fraunhofer.de,Fraunhofer ITMP,InnoDATA
+2021/11/24 2:22:30 PM GMT+1,Yes,Ole,Pless,ole.pless@itmp.fraunhofer.de,Fraunhofer ITMP,AntiDEG;AltTAC;BioDEL;ProxiDETECT
+2021/12/10 2:30:46 PM GMT+1,Yes,Paul,Gehrtz,paul.gehrtz@merckgroup.com,Merck Group,NewPRO;ProxiTRAPS
+2021/11/25 11:33:51 AM GMT+1,Yes,Peter,Stacey,peter.x.stacey@gsk.com,GlaxoSmithKline,ProxiDETECT
+2021/11/24 2:20:45 PM GMT+1,Yes,Philip,Gribbon,philip.gribbon@itmp.fraunhofer.de,Fraunhofer ITMP,AntiDEG;AltTAC;InnoDATA;ProxiDETECT
+2022/01/03 7:06:12 AM GMT+1,Yes,Rajeshwari,Rathore,rathore@em.uni-frankfurt.de,Goethe-Universität Frankfurt,iGLUE
+2021/12/06 11:40:10 AM GMT+1,Yes,Ram,Bhaskara,bhaskara@med.uni-frankfurt.de,Goethe-Universität Frankfurt,InnoTECH;InnoDATA
+2021/11/17 3:49:43 PM GMT+1,Yes,Reagon ,Karki,reagon.karki@itmp.fraunhofer.de,Fraunhofer ITMP,InnoDATA
+2022/01/13 3:03:51 PM GMT+1,Yes,Robin,Deutscher,robin.deutscher@tu-darmstadt.de,Technische Universität Darmstadt,ProxiDETECT
+2021/11/25 2:49:44 PM GMT+1,Yes,Sarah,Vogel-Kindgen,vogel-kindgen@em.uni-frankfurt.de,Goethe-Universität Frankfurt,InnoTECH;BioDEL
+2021/11/24 3:04:09 PM GMT+1,Yes,Sebastian,Mathea,sebastianmathea.kinase@gmail.com,Goethe-Universität Frankfurt,AntiCAN
+2021/12/01 1:45:48 PM GMT+1,Yes,Sheraz,Gul,Sheraz.Gul@itmp.fraunhofer.de,Fraunhofer ITMP,AntiDEG;AltTAC;InnoDATA;BioDEL;ProxiDETECT
+2021/11/24 2:52:17 PM GMT+1,Yes,Simon,Woehrle,simon.woehrle@merckgroup.com,Merck Group,NewPRO;ProxiTRAPS
+2021/11/24 3:00:41 PM GMT+1,Yes,Stefan,Knapp,knapp@pharmchem.uni-frankfurt.de,Goethe-Universität Frankfurt,AntiCAN;iGLUE;NewPRO;ProxiTRAPS
+2021/12/06 12:25:30 PM GMT+1,Yes,Stefan,Mueller,ste.mueller@em.uni-frankfurt.de,Goethe-Universität Frankfurt,AltTAC
+2021/12/01 12:51:04 PM GMT+1,Yes,Undine,Haferkamp,undine.haferkamp@itmp.fraunhofer.de,Fraunhofer ITMP,AntiDEG;AltTAC;BioDEL;ProxiDETECT
+2021/11/29 2:28:50 PM GMT+1,Yes,Varun,Shah,shah@med.uni-frankfurt.de,Goethe-Universität Frankfurt,iGLUE
+2021/12/03 6:06:44 PM GMT+1,Yes,Viktor,Lakics,viktor.lakics@abbvie.com,AbbVie Deutschland,AntiDEG;ProxiDETECT
+2021/12/06 11:37:35 AM GMT+1,Yes,Volker,Eckelt,Volker.Eckelt@PERKINELMER.COM,PerkinElmer,ProxiDETECT
+2021/12/17 3:39:28 PM GMT+1,Yes,Volkhard,Kempf,volkhard.kempf@kgu.de,Goethe-Universität Frankfurt,AntiMIC
+2021/12/06 11:45:57 AM GMT+1,Yes,Xinlai,Cheng,cheng@pharmchem.uni-frankfurt.de,Goethe-Universität Frankfurt,iGLUE
+2021/11/24 2:39:58 PM GMT+1,Yes,Yi,Cheng,Cheng@med.uni-frankfurt.de,Goethe-Universität Frankfurt,AntiMIC
+2021/12/01 12:13:13 PM GMT+1,Yes,Yojana,Gadiya,Yojana.Gadiya@itmp.fraunhofer.de,Fraunhofer ITMP,InnoDATA
+2021/12/06 1:39:44 PM GMT+1,Yes,Yves,Matthess,yves.matthess@kgu.de,Goethe-Universität Frankfurt,InnoTECH
