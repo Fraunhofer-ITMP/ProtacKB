@@ -417,7 +417,7 @@ def createNodes(tx):
 def createReln(tx,ptacNode):
 
     ptacdb = pd.read_csv(
-        os.path.join(DATA_DIR, "PtacDBwithWheadnCID.csv"),
+        os.path.join(DATA_DIR, "ptacdb_u2g.csv"),
         dtype=str,
         encoding=ENCODING
     )
