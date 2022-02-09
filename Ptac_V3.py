@@ -153,8 +153,8 @@ def createNodes(tx):
     #     )
 
     warhead = pd.read_csv(
-        os.path.join(DATA_DIR, "warhead.csv"),
-        usecols=["Name", "Target", "Smiles", "IC50 (nM)", "Assay (IC50)", "Molecular Formula", "Molecular Weight",
+        os.path.join(DATA_DIR, "warhead_u2g.csv"),
+        usecols=["Name", "Gene", "Smiles", "IC50 (nM)", "Assay (IC50)", "Molecular Formula", "Molecular Weight",
                  "InChI Key", "InChI", "PubChem", "ChEMBL"],
         dtype=str,
         encoding=ENCODING
@@ -432,7 +432,7 @@ def createReln(tx,ptacNode):
         encoding=ENCODING
     )
 
-    for target, e3, ptac, headwar in tqdm(ptacdb[["Target","E3 ligase","protac_name","Warhead_name"]].values):
+    for target, e3, ptac, headwar in tqdm(ptacdb[["Gene","E3 ligase","protac_name","Warhead_name"]].values):
         e3Tac = Relationship(ptacNode["E3 ligase"][e3],"binds",ptacNode["Protac"][ptac])
         targetTac = Relationship(ptacNode["Protein"][target], 'binds', ptacNode["Protac"][ptac], **{"E3 ligase":e3})
         e3Target = Relationship(ptacNode["E3 ligase"][e3], 'ubiquitinates', ptacNode["Protein"][target])
@@ -490,11 +490,11 @@ def createGraph():
     # Authorize the clientsheet
     #client = gspread.authorize(creds)
 
-    #db_name = graph.begin()
-    #graph.delete_all()  # delete existing data
-    #getPtac = createNodes(db_name)
-    #getRels = createReln(db_name,getPtac)
-    #graph.commit(db_name)
+    db_name = graph.begin()
+    graph.delete_all()  # delete existing data
+    getPtac = createNodes(db_name)
+    getRels = createReln(db_name,getPtac)
+    graph.commit(db_name)
 
     #creating peronalized logins
     create_users(url=FRAUNHOFER_URL, name=FRAUNHOFER_ADMIN_NAME, password=FRAUNHOFER_ADMIN_PASS, data_df=data_df)
