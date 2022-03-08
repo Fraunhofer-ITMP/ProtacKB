@@ -227,7 +227,7 @@ def createNodes(tx):
                                                         "Hydrogen Bond Acceptor": hbac,
                                                         "Hydrogen Bond Donor": hbdc, "Rotatable Bond": rbc,
                                                         "Source": f"https://doi.org/{source}",
-                                                        "Structure": f"https://molview.org/?q={smiles}",
+                                                        #"Structure": f"https://molview.org/?q={smiles}",
                                                         "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}"})
 
         #tx.create(node_dict["Protac"][protac])
@@ -254,7 +254,8 @@ def createNodes(tx):
             node_dict["Protac"][protac] = Node("Protac", ** {"Protac":protac,"InChI Key":inchikey,"Smiles":smiles,"Cell":cell,"Status":status,
                                                              "Ligand Name":ligname,"Linker Type":linkertype,"Hydrogen Bond Acceptor":hba,
                                                              "Hydrogen Bond Donor":hbd,"Off targets":offtar,"PubMed":f"https://pubmed.ncbi.nlm.nih.gov/?term={pubmed}",
-                                                             "Structure": f"https://molview.org/?q={smiles}","Ligand PDB":f"https://www.rcsb.org/structure/{ligpdb}",
+                                                             #"Structure": f"https://molview.org/?q={smiles}",
+                                                             "Ligand PDB":f"https://www.rcsb.org/structure/{ligpdb}",
                                                              "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}"})
 
             #tx.create(node_dict["Protac"][protac])
@@ -273,10 +274,11 @@ def createNodes(tx):
                                         "Smiles":smiles,"Molecular Weight":mw,"Molecular Formula":mf,"Ring Count":rc,
                                                         "Hydrogen Bond Acceptor Count":hba,"Hydrogen Bond Donor Count":hbd,"Rotatable Bond Count":rbc,
                                                         "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}","Polar Surface area":polarea,
-                                                        "Structure": f"https://molview.org/?q={smiles}"})
+                                                        #"Structure": f"https://molview.org/?q={smiles}"
+                                                        })
 
     #create target nodes
-    for target, uniprot in tqdm(ptacdb[["Target","Uniprot"]].values, total=ptacdb.shape[0]):
+    for target, uniprot in tqdm(ptacdb[["Gene","Uniprot"]].values, total=ptacdb.shape[0]):
 
         if target in node_dict["Protein"]:
             continue
