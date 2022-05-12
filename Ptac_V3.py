@@ -1,7 +1,7 @@
 import pandas as pd
 
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+#import gspread
+#from oauth2client.service_account import ServiceAccountCredentials
 
 import getopt
 import os
@@ -23,7 +23,6 @@ data_df = pd.read_csv(
     dtype=str,
     encoding=ENCODING
 )
-
 
 def create_users(
     data_df: pd.DataFrame,
