@@ -18,14 +18,10 @@ from tqdm import tqdm
 from connection import populate_db,_add_nodes
 from constants import ENCODING, DATA_DIR
 
-data_df = pd.read_csv(
-    os.path.join(DATA_DIR, "userdetails.csv"),
-    dtype=str,
-    encoding=ENCODING
-)
+
 
 def create_users(
-    data_df: pd.DataFrame,
+    #data_df: pd.DataFrame,
     url: str,
     name: str,
     password: str
@@ -33,28 +29,34 @@ def create_users(
     """Create automatic users."""
     graph = Graph(url, auth=(name, password), name='system')
 
+    data_df = pd.read_csv(
+        os.path.join(DATA_DIR, "userdetails.csv"),
+        dtype=str,
+        encoding=ENCODING
+    )
+
     # Form the UserName of people
-    data_df['First Name'] = data_df['First Name'].map(lambda x: x.split()[0].split('-')[0].capitalize())
-    data_df['Last Name'] = data_df['Last Name'].map(lambda x: ''.join([i.capitalize() for i in x.split()]))
-    data_df['UserName'] = data_df['First Name'] + data_df['Last Name']
+    #data_df['First Name'] = data_df['First Name'].map(lambda x: x.split()[0].split('-')[0].capitalize())
+    #data_df['Last Name'] = data_df['Last Name'].map(lambda x: ''.join([i.capitalize() for i in x.split()]))
+    #data_df['UserName'] = data_df['First Name'] + data_df['Last Name']
 
-    # Replace certain characters
-    replace_char = {
-        'ö': 'oe',
-        'é': 'e',
-        'í': 'i',
-        "O'": 'o',
-        'ø': 'o',
-        'ä' : 'ae'
-    }
-
-    for key, val in replace_char.items():
-        data_df['UserName'] = data_df['UserName'].str.replace(key, val)
+    # # Replace certain characters
+    # replace_char = {
+    #     'ö': 'oe',
+    #     'é': 'e',
+    #     'í': 'i',
+    #     "O'": 'o',
+    #     'ø': 'o',
+    #     'ä' : 'ae'
+    # }
+    #
+    # for key, val in replace_char.items():
+    #     data_df['UserName'] = data_df['UserName'].str.replace(key, val)
 
     known_users = graph.run("SHOW USERS").to_series()
 
     for idx in tqdm(data_df['UserName'].values):
-        idx = idx.split('-')[0]
+        #idx = idx.split('-')[0]
 
         if idx in known_users.values:  # Omit already present users
             continue
@@ -63,8 +65,8 @@ def create_users(
         graph.run(cypher)
 
     # Save user details
-    data_df = data_df[['First Name', 'Last Name', 'UserName']]
-    data_df.to_csv(f'{DATA_DIR}/username_details_export.tsv', sep='\t', index=False)
+    #data_df = data_df[['First Name', 'Last Name', 'UserName']]
+    #data_df.to_csv(f'{DATA_DIR}/username_details_export.csv', sep=',', index=False)
 
 def createNodes(tx):
 
@@ -502,5 +504,6 @@ def createGraph():
 
     #return getPtac
 
-createGraph()
+#createGraph()
+create_users(FRAUNHOFER_URL,FRAUNHOFER_ADMIN_NAME,FRAUNHOFER_ADMIN_PASS)
 #all over again
