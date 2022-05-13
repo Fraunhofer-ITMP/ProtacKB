@@ -220,7 +220,7 @@ def createNodes(tx):
         if protac in node_dict["Protac"]:
             continue
 
-        node_dict["Protac"][protac] = Node("Protac", **{"Protac": protac, "InChI": inchi,
+        node_dict["Protac"][protac] = Node("Protac", **{"Name": protac, "InChI": inchi,
                                                         "InChI Key": inchikey,
                                                         "Smiles": smiles, "Molecular Weight": mw,
                                                         "Molecular Formula": mf, "Hydrogen Atom": hac,
@@ -252,7 +252,7 @@ def createNodes(tx):
 
 
         else:
-            node_dict["Protac"][protac] = Node("Protac", ** {"Protac":protac,"InChI Key":inchikey,"Smiles":smiles,"Cell":cell,"Status":status,
+            node_dict["Protac"][protac] = Node("Protac", ** {"Name":protac,"InChI Key":inchikey,"Smiles":smiles,"Cell":cell,"Status":status,
                                                              "Ligand Name":ligname,"Linker Type":linkertype,"Hydrogen Bond Acceptor":hba,
                                                              "Hydrogen Bond Donor":hbd,"Off targets":offtar,"PubMed":f"https://pubmed.ncbi.nlm.nih.gov/?term={pubmed}",
                                                              #"Structure": f"https://molview.org/?q={smiles}",
@@ -271,7 +271,7 @@ def createNodes(tx):
             node_dict["Protac"][inchikeys_2[inchikey]].update({"Protac Name":protac,"Protac Synonym":ptacsyn,"Compound":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}","testinchi":inchikey})
 
         else:
-            node_dict["Protac"][protac] = Node("Protac", **{"Protac":protac, "Protac Synonym":ptacsyn,"InChI":inchi,"InChI Key":inchikey,
+            node_dict["Protac"][protac] = Node("Protac", **{"Name":protac, "Protac Synonym":ptacsyn,"InChI":inchi,"InChI Key":inchikey,
                                         "Smiles":smiles,"Molecular Weight":mw,"Molecular Formula":mf,"Ring Count":rc,
                                                         "Hydrogen Bond Acceptor Count":hba,"Hydrogen Bond Donor Count":hbd,"Rotatable Bond Count":rbc,
                                                         "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}","Polar Surface area":polarea,
@@ -284,7 +284,7 @@ def createNodes(tx):
         if target in node_dict["Protein"]:
             continue
         #add proteins in dictionary plus create a dictionary of metadata using **
-        node_dict["Protein"][target] = Node("Protein", **{"Protein":target,"Uniprot":uniprot,
+        node_dict["Protein"][target] = Node("Protein", **{"Name":target,"Uniprot":uniprot,
                                                           "Uniprot link":f"https://www.uniprot.org/uniprot/{uniprot}",
                                                           "PubMed":f"https://pubmed.ncbi.nlm.nih.gov/?term={target}",
                                                           "ProteinsPlus":f"https://proteins.plus/{uniprot}",
@@ -302,7 +302,7 @@ def createNodes(tx):
         if target in node_dict["Protein"]:
             continue
 
-        node_dict["Protein"][target] = Node("Protein", **{"Protein": target, "Uniprot": uniprot,
+        node_dict["Protein"][target] = Node("Protein", **{"Name": target, "Uniprot": uniprot,
                                                           "Uniprot link": f"https://www.uniprot.org/uniprot/{uniprot}",
                                                           "PubMed": f"https://pubmed.ncbi.nlm.nih.gov/?term={target}",
                                                           "ProteinsPlus":f"https://proteins.plus/{uniprot}",
@@ -401,7 +401,7 @@ def createNodes(tx):
             continue
 
         node_dict["Warhead"][whead] = Node("Warhead",
-                                           **{"Warhead": whead, "Smiles": smiles, "IC 50": ic50, "Assay": assay,
+                                           **{"Name": whead, "Smiles": smiles, "IC 50": ic50, "Assay": assay,
                                               "Molecular Formula": mf, "Molecular Weight": mw, "InChI Key": inchikey,
                                               "InChI": inchi,
                                               "PubChem": f"https://pubchem.ncbi.nlm.nih.gov/compound/{pubchem}",
@@ -500,10 +500,10 @@ def createGraph():
     graph.commit(db_name)
 
     #creating peronalized logins
-    create_users(url=FRAUNHOFER_URL, name=FRAUNHOFER_ADMIN_NAME, password=FRAUNHOFER_ADMIN_PASS, data_df=data_df)
+    #create_users(url=FRAUNHOFER_URL, name=FRAUNHOFER_ADMIN_NAME, password=FRAUNHOFER_ADMIN_PASS, data_df=data_df)
 
     #return getPtac
 
-#createGraph()
-create_users(FRAUNHOFER_URL,FRAUNHOFER_ADMIN_NAME,FRAUNHOFER_ADMIN_PASS)
+createGraph()
+#create_users(FRAUNHOFER_URL,FRAUNHOFER_ADMIN_NAME,FRAUNHOFER_ADMIN_PASS)
 #all over again
