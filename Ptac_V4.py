@@ -5,10 +5,17 @@ import pandas as pd
 
 import getopt
 import os
+import io
+from bioservices import UniProt
+import uniprot
 import random
 import sys
 from py2neo import Graph
 from constants import FRAUNHOFER_ADMIN_NAME, FRAUNHOFER_ADMIN_PASS, FRAUNHOFER_URL
+import urllib
+import pickle
+from urllib.parse import urlparse
+
 #from constants import ADMIN_NAME, ADMIN_PASS, URL
 
 from py2neo import Node, Relationship
@@ -34,24 +41,6 @@ def create_users(
         dtype=str,
         encoding=ENCODING
     )
-
-    # Form the UserName of people
-    #data_df['First Name'] = data_df['First Name'].map(lambda x: x.split()[0].split('-')[0].capitalize())
-    #data_df['Last Name'] = data_df['Last Name'].map(lambda x: ''.join([i.capitalize() for i in x.split()]))
-    #data_df['UserName'] = data_df['First Name'] + data_df['Last Name']
-
-    # # Replace certain characters
-    # replace_char = {
-    #     'ö': 'oe',
-    #     'é': 'e',
-    #     'í': 'i',
-    #     "O'": 'o',
-    #     'ø': 'o',
-    #     'ä' : 'ae'
-    # }
-    #
-    # for key, val in replace_char.items():
-    #     data_df['UserName'] = data_df['UserName'].str.replace(key, val)
 
     known_users = graph.run("SHOW USERS").to_series()
 
@@ -203,10 +192,19 @@ def createNodes(tx):
 
     # print(ubinet_e3_anno.columns)
 
+    #read iglue file
 
+    iglue = pd.read_csv(
+        os.path.join(DATA_DIR,'iglueWithCID.csv'),
+        dtype=str,
+        encoding=ENCODING
+    )
     # create dictionary for all nodes
 
-    node_dict = {'Protein': {}, 'E3 ligase': {}, 'Protac': {}, 'Warhead': {}, 'E3 binder': {}}
+    node_dict = {'Protein': {}, 'E3 ligase': {}, 'Protac': {},
+                 'Warhead': {}, 'E3 binder': {},'iGLUE':{}}
+
+    print('node_dict created')
 
     #1 protacdb
     #select columns and create a list of them
@@ -214,7 +212,7 @@ def createNodes(tx):
             "Heavy Atom Count", "Ring Count", "Hydrogen Bond Acceptor Count",
             "Hydrogen Bond Donor Count", "Rotatable Bond Count","Topological Polar Surface Area", "Article DOI","CID_pchem"]
     for protac, inchi, inchikey, smiles, mw, mf, hac, rc, hbac, hbdc, rbc,tpsa, source,cid in tqdm(
-            ptacdb[cols].values, total=ptacdb.shape[0]):
+            ptacdb[cols].values, total=ptacdb.shape[0],desc='ptacdb'):
         # (protac, protacsyn, inchi, inchikey, smiles, mw, mf, hac, rc, hbac, hbdc, rbc, source) = row
         if protac in node_dict["Protac"]:
             continue
@@ -230,7 +228,7 @@ def createNodes(tx):
                                                         #"Structure": f"https://molview.org/?q={smiles}",
                                                         "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}"})
 
-        #tx.create(node_dict["Protac"][protac])
+        tx.create(node_dict["Protac"][protac])
 
     inchikeys = {val['InChI Key']: i for i, val in node_dict["Protac"].items()}
     #print(inchikeys)
@@ -258,7 +256,7 @@ def createNodes(tx):
                                                              "Ligand PDB":f"https://www.rcsb.org/structure/{ligpdb}",
                                                              "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}"})
 
-            #tx.create(node_dict["Protac"][protac])
+            tx.create(node_dict["Protac"][protac])
 
     inchikeys_2 = {val['InChI Key']: i for i, val in node_dict["Protac"].items()}
     #3 pubchem
@@ -431,12 +429,127 @@ def createNodes(tx):
                                                     "ChEMBL": f"https://www.ebi.ac.uk/chembl/compound_report_card/{chembl}"})
 
 
-    for ligase in tqdm(e3ligand['Target'].values, total=e3ligand.shape[0]):
+    for ligase in tqdm(e3ligand['Target'].values, total=e3ligand.shape[0],desc='read e3 ligand file'):
 
         if ligase in node_dict['E3 ligase']:
             continue
         node_dict['E3 ligase'][ligase] = Node('E3 ligase',**{"Name":ligase})
 
+    ###work with iglue file
+    iglue_cols = ['Catalog No.', 'Product Name', 'Clinical Research Yes/NO',
+       'FDA Approved Yes/No', 'CAS Number', 'Form', 'Targets',
+       'Information', 'Max Solubility in DMSO', 'URL',
+       'Compound ID', 'Well', 'Rack', 'Barcode', 'CID']
+
+    infile = open('data/cid_allProp', 'rb')
+    cid_allProp = pickle.load(infile)
+    infile.close()
+
+    #print(cid_allProp.keys())
+
+    for cat, name, clinres, fda, cas, form, target, info, dmso, url, compid, well, rack, barcode, cid in tqdm(iglue[iglue_cols].values, total=iglue.shape[0],desc= 'read iglue file'):
+
+        if name in node_dict["iGLUE"]:
+            continue
+
+        node_dict["iGLUE"][name] = Node("iGLUE", ** {'Name':name, 'Catalog Number':cat,'Clinical Research Status':clinres,
+                                                      'FDA Status':fda,'CAS':cas,'Form':form,'Targets':target,'Info':info,
+                                                      'Max Solubility in DMSO':dmso,'URL':url,'Compound ID':compid,
+                                                      'Well':well,'Rack':rack,'Barcode':barcode,'CID':cid})
+
+        #print(node_dict["iGLUE"][name])
+
+        get_cid = node_dict["iGLUE"][name]['CID']
+        #print('here: '+get_cid)
+        if get_cid != 'None':
+            #get_cid = node_dict['iGLUE'][name]['CID']
+            #schem = cid_allProp[get_cid]['SCHEMBL']
+            node_dict["iGLUE"][name].update({'Canonical Smiles':cid_allProp[get_cid]['canonical_smiles'],
+                                             'Exact Mass':cid_allProp[get_cid]['exact_mass'],
+                                             'Hydrogen Bond Acceptor Count':cid_allProp[get_cid]['h_bond_acceptor_count'],
+                                             'Hydrogen Bond Donor Count':cid_allProp[get_cid]['h_bond_donor_count'],
+                                             'XlogP':cid_allProp[get_cid]['xlogp'],
+                                             'Rotatable Bond Count':cid_allProp[get_cid]['rotatable_bond_count'],
+                                             'Topological Polar Surface Area':cid_allProp[get_cid]['tpsa'],
+                                             'InChi':cid_allProp[get_cid]['inchi'],
+                                             'InChi Key':cid_allProp[get_cid]['inchikey'],
+                                             'Heavy Atom Count':cid_allProp[get_cid]['heavy_atom_count'],
+                                             'Isomeric Smiles':cid_allProp[get_cid]['isomeric_smiles'],
+                                             'Molecular Formula':cid_allProp[get_cid]['molecular_formula'],
+                                             'Molecular Weight':cid_allProp[get_cid]['molecular_weight']})
+
+            if 'CHEMBL' in cid_allProp[get_cid]:
+                chem = cid_allProp[get_cid]['CHEMBL']
+                node_dict["iGLUE"][name].update({'ChEMBL':f"https://www.ebi.ac.uk/chembl/compound_report_card/{chem}"})
+
+            if 'SCHEMBL' in cid_allProp[get_cid]:
+                schem = cid_allProp[get_cid]['SCHEMBL']
+                node_dict["iGLUE"][name].update({'SCHEMBL':f"https://www.surechembl.org/chemical/{schem}"})
+
+        #print(node_dict["iGLUE"][name])
+
+    infile = open('data/Extend_UniProtInfo', 'rb')
+    uniprotDict = pickle.load(infile)
+    infile.close()
+
+    uniprot_nodes = {'Reactome': {}, 'Function': {}, 'Biological Process': {}, 'Disease': {}}
+
+    for id in uniprotDict:
+
+        if (uniprotDict[id]["Reactome"]):
+
+            reactome_list = list(uniprotDict[id]["Reactome"].keys())
+
+            for reactome in reactome_list:
+
+                if reactome in uniprot_nodes["Reactome"]:
+                    continue
+
+                uniprot_nodes["Reactome"][reactome] = Node("Reactome", **{'Name': reactome,
+                                                                          'Reactome ID': f"https://reactome.org/content/detail/{uniprotDict[id]['Reactome'][reactome]}"})
+
+        if (uniprotDict[id]["Function"]):
+
+            function_list = list(uniprotDict[id]['Function'].keys())
+
+            for function in function_list:
+
+                if function in uniprot_nodes['Function']:
+                    continue
+
+                uniprot_nodes['Function'][function] = Node('Function', **{'Name': function,
+                                                                          'Gene Ontolgy Function': f"https://www.ebi.ac.uk/QuickGO/term/{uniprotDict[id]['Function'][function]}"})
+
+        if (uniprotDict[id]['BioProcess']):
+
+            bioprocess_list = list(uniprotDict[id]['BioProcess'].keys())
+
+            for bioprocess in bioprocess_list:
+
+                if bioprocess in uniprot_nodes["Biological Process"]:
+                    continue
+
+                uniprot_nodes["Biological Process"][bioprocess] = Node('Biological Process', **{'Name': bioprocess,
+                                                                                                'Gene Ontolgy Biological Process': f"https://www.ebi.ac.uk/QuickGO/term/{uniprotDict[id]['BioProcess'][bioprocess]}"})
+
+        if (uniprotDict[id]['Disease']):
+
+            disease_list = list(uniprotDict[id]['Disease'].keys())
+
+            for disease in disease_list:
+
+                if disease in uniprot_nodes['Disease']:
+                    continue
+
+                uniprot_nodes['Disease'][disease] = Node('Disease', **{'Name': disease,
+                                                                       'OMIM': f"https://www.omim.org/entry/{uniprotDict[id]['Disease'][disease]}"})
+
+
+    node_dict.update(uniprot_nodes)
+
+
+
+#comment following codes to be faster
     # Add also updated nodes into graph
     for node_type in node_dict:
         _add_nodes(
@@ -444,7 +557,7 @@ def createNodes(tx):
             tx=tx
         )
 
-    return node_dict
+    return(node_dict)
 
 
 def createReln(tx,ptacNode):
@@ -529,6 +642,153 @@ def createReln(tx,ptacNode):
         tx.create(targetTac)
         tx.create(e3Target)
 
+def createReln_uniprot(tx,ptacNode):
+
+    infile = open('data/Extend_UniProtInfo', 'rb')
+    uniprotDict = pickle.load(infile)
+    infile.close()
+
+    uprot = list(uniprotDict.keys())
+
+    print('started to create nodes from uniprot to reactome and GOs')
+
+    for p in ptacNode['Protein']:
+        #print('start')
+        #print(ptacNode['Protein'][p]['Uniprot'])
+        for u in uprot:
+            print('uprot from dict: ' + u)
+            if u == ptacNode['Protein'][p]['Uniprot']:
+                # print('check completed: '+ node_dict_new['Protein'][p]['Uniprot'])
+                # print(node_dict_new['Protein'][p]['Name'])
+
+                if uniprotDict[u]['Reactome']:
+                    racts = uniprotDict[u]['Reactome'].keys()
+                    for r in racts:
+                        uprot2reactome = Relationship(ptacNode['Protein'][p], 'isInvolvedin', ptacNode['Reactome'][r])
+                        tx.create(uprot2reactome)
+
+                if uniprotDict[u]['Function']:
+                    function = uniprotDict[u]['Function'].keys()
+                    for fun in function:
+                        uprot2function = Relationship(ptacNode['Protein'][p], 'hasFunction', ptacNode['Function'][fun])
+                        tx.create(uprot2function)
+
+                if uniprotDict[u]['BioProcess']:
+                    bps = uniprotDict[u]['BioProcess'].keys()
+                    for bp in bps:
+                        uprot2bp = Relationship(ptacNode['Protein'][p], 'hasBioProcess', ptacNode['Biological Process'][bp])
+                        tx.create(uprot2bp)
+
+                if uniprotDict[u]['Disease']:
+                    diseases = uniprotDict[u]['Disease'].keys()
+                    for d in diseases:
+                        uprot2dis = Relationship(ptacNode['Protein'][p], 'HasDisease', ptacNode['Disease'][d])
+                        tx.create(uprot2dis)
+
+    print('nodes from uniprot to reactome and GOs created')
+
+
+def ExtractFromUniProt(uniprot_id):
+    from bioservices import UniProt
+    Uniprot_Dict = []
+    # Make a link to the UniProt webservice
+    service = UniProt()
+
+    for id in uniprot_id:
+
+        # create URL for each uniprot id
+        url = 'https://www.uniprot.org/uniprot/' + id + '.txt'
+        print(url)
+
+        # Retrieve data for id in text format
+        ret_uprot = urllib.request.urlopen(url)
+
+        print(id)
+        id_copy = id
+        i = 0
+        j = 0
+        id = {}
+        id['Disease'] = {}
+        id['Reactome'] = {}
+        id['Function'] = {}
+        id['BioProcess'] = {}
+        # print(id)
+
+        # parse each line looking for info about disease, pathway, funcn, bp and so on
+        for line in ret_uprot:
+
+            line = line.decode('utf-8')
+
+            # parse lines with disease and extract disease names and omim ids
+            if '-!- DISEASE:' in line:
+                if ('[MIM:' in line):
+                    dis = line.split(':')
+                    # dis returns list of splitted text, [1] = name of dis, [2] = OMIM ID, extra chars need cleaning
+                    # print(dis[1][1:-5])
+                    # print(dis[2][:-1])
+                    id['Disease'].update({dis[1][1:-5]: dis[2][:-1]})
+
+            # extract reactome ids and names
+            if 'Reactome;' in line:
+                ract = line.split(';')
+                # ract returns list with reactome id and name, needs cleaning
+                id['Reactome'].update({ract[2][1:-2]: ract[1][1:]})
+                # print(ract[1][1:])
+                # print(ract[2][1:-2])
+
+            # look for functions
+            if ' F:' in line:
+                if j < 5:
+                    # take only first 5 entries for now
+                    # print(j)
+                    fn = line.split(';')
+                    # fn returns list with GO ids and names
+                    id['Function'].update({fn[2][3:]: fn[1][1:]})
+                    # print(fn[1][1:])
+                    # print(fn[2][3:])
+                    j += 1
+
+            # look for biological processes
+            if ' P:' in line:
+                if i < 5:
+                    # take only first 5 entries for now
+                    # print(i)
+                    bp = line.split(';')
+                    # bp returns list with GO ids and names
+                    id['BioProcess'].update({bp[2][3:]: bp[1][1:]})
+                    # print(bp[1][1:])
+                    # print(bp[2][3:])
+                    i += 1
+
+        # fetch info about gene, len, seq, mass from api directly
+        # Make a query string
+        query = "accession:" + str(id_copy)
+
+        # Define a list of columns we want to retrive
+        # columnlist = "id,entry name,length,mass,go(biological process),go(molecular function), pathway,feature(TOPOLOGICAL DOMAIN),comment(DISEASE),pathway"
+        columnlist = "id,entry name,genes(PREFERRED),length,mass,sequence"
+
+        # Run the remote search
+        result = service.search(query, frmt="tab", columns=columnlist)
+
+        df_result = pd.read_table(io.StringIO(result))
+
+        geneName = {'Gene': df_result['Gene names  (primary )'][0]}
+        seqLen = {'Length': df_result['Length'][0]}
+        # remove comma from mass values
+        mass = {'Mass': int(df_result['Mass'][0].replace(",", ""))}
+        seq = {'Sequence': df_result['Sequence'][0]}
+
+        id.update(geneName)
+        id.update(seqLen)
+        id.update(mass)
+        id.update(seq)
+
+        Uniprot_Dict.append(id)
+
+    Uniprot_Dict = dict(zip(uniprot_id, Uniprot_Dict))
+
+    return(Uniprot_Dict)
 
 def createGraph():
     # create a new database
@@ -550,7 +810,9 @@ def createGraph():
     db_name = graph.begin()
     graph.delete_all()  # delete existing data
     getPtac = createNodes(db_name)
+    getRels_uniprot = createReln_uniprot(db_name, getPtac)
     getRels = createReln(db_name,getPtac)
+
     graph.commit(db_name)
 
     #creating peronalized logins
@@ -560,4 +822,17 @@ def createGraph():
 
 createGraph()
 #create_users(FRAUNHOFER_URL,FRAUNHOFER_ADMIN_NAME,FRAUNHOFER_ADMIN_PASS)
-#all over again
+
+
+# graph = Graph(
+#     FRAUNHOFER_URL,
+#     auth=(FRAUNHOFER_ADMIN_NAME, FRAUNHOFER_ADMIN_PASS),
+# )
+# db_name = graph.begin()
+# node_Dict = createNodes(db_name)
+#
+# outfile = open(os.path.join(DATA_DIR, "node_dict_new"),'wb')
+# pickle.dump(node_Dict,outfile)
+# outfile.close()
+
+
