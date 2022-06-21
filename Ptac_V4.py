@@ -199,12 +199,20 @@ def createNodes(tx):
         dtype=str,
         encoding=ENCODING
     )
+
+    iglue2 = pd.read_csv(
+        os.path.join(DATA_DIR, 'iglue2WithCID.csv'),
+        dtype=str,
+        encoding=ENCODING
+    )
+
     # create dictionary for all nodes
 
     node_dict = {'Protein': {}, 'E3 ligase': {}, 'Protac': {},
-                 'Warhead': {}, 'E3 binder': {},'iGLUE':{}}
+                 'Warhead': {}, 'E3 binder': {},'iGLUE':{},'Disease':{}}
 
-    print('node_dict created')
+
+    #print('node_dict created')
 
     #1 protacdb
     #select columns and create a list of them
@@ -228,7 +236,7 @@ def createNodes(tx):
                                                         #"Structure": f"https://molview.org/?q={smiles}",
                                                         "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}"})
 
-        tx.create(node_dict["Protac"][protac])
+        #tx.create(node_dict["Protac"][protac])
 
     inchikeys = {val['InChI Key']: i for i, val in node_dict["Protac"].items()}
     #print(inchikeys)
@@ -256,7 +264,7 @@ def createNodes(tx):
                                                              "Ligand PDB":f"https://www.rcsb.org/structure/{ligpdb}",
                                                              "PubChem":f"https://pubchem.ncbi.nlm.nih.gov/compound/{cid}"})
 
-            tx.create(node_dict["Protac"][protac])
+            #tx.create(node_dict["Protac"][protac])
 
     inchikeys_2 = {val['InChI Key']: i for i, val in node_dict["Protac"].items()}
     #3 pubchem
@@ -435,6 +443,57 @@ def createNodes(tx):
             continue
         node_dict['E3 ligase'][ligase] = Node('E3 ligase',**{"Name":ligase})
 
+    ###working with second iglue file
+
+    infile = open('data/cid_allProp_iglue2', 'rb')
+    cid_allProp = pickle.load(infile)
+    infile.close()
+
+    cols = ['Catalog Number','Item Name','CAS Number','Target','CID']
+
+    for cat,name, cas, target, cid in tqdm(iglue2[cols].values, total=iglue2.shape[0],desc= 'read iglue second file'):
+
+        if name in node_dict["iGLUE"]:
+            continue
+
+        node_dict["iGLUE"][name] = Node("iGLUE",
+                                        **{'Name': name, 'Catalog Number': cat, 'CAS': cas, 'Targets': target, 'CID': cid})
+        # print(node_dict["iGLUE"][name])
+
+        get_cid = node_dict["iGLUE"][name]['CID']
+        # print('here: '+get_cid)
+        if get_cid != 'None':
+            # get_cid = node_dict['iGLUE'][name]['CID']
+            # schem = cid_allProp[get_cid]['SCHEMBL']
+            node_dict["iGLUE"][name].update({'Canonical Smiles': cid_allProp[get_cid]['canonical_smiles'],
+                                             'Exact Mass': cid_allProp[get_cid]['exact_mass'],
+                                             'Hydrogen Bond Acceptor Count': cid_allProp[get_cid]['h_bond_acceptor_count'],
+                                             'Hydrogen Bond Donor Count': cid_allProp[get_cid]['h_bond_donor_count'],
+                                             'XlogP': cid_allProp[get_cid]['xlogp'],
+                                             'Rotatable Bond Count': cid_allProp[get_cid]['rotatable_bond_count'],
+                                             'Topological Polar Surface Area': cid_allProp[get_cid]['tpsa'],
+                                             'InChi': cid_allProp[get_cid]['inchi'],
+                                             'InChi Key': cid_allProp[get_cid]['inchikey'],
+                                             'Heavy Atom Count': cid_allProp[get_cid]['heavy_atom_count'],
+                                             'Isomeric Smiles': cid_allProp[get_cid]['isomeric_smiles'],
+                                             'Molecular Formula': cid_allProp[get_cid]['molecular_formula'],
+                                             'Molecular Weight': cid_allProp[get_cid]['molecular_weight']})
+
+            if 'CHEMBL' in cid_allProp[get_cid]:
+                chem = cid_allProp[get_cid]['CHEMBL']
+                node_dict["iGLUE"][name].update({'ChEMBL': f"https://www.ebi.ac.uk/chembl/compound_report_card/{chem}"})
+
+            if 'SCHEMBL' in cid_allProp[get_cid]:
+                schem = cid_allProp[get_cid]['SCHEMBL']
+                node_dict["iGLUE"][name].update({'SCHEMBL': f"https://www.surechembl.org/chemical/{schem}"})
+
+    for dis in tqdm(iglue2['Indication'].values, total = iglue2.shape[0],desc='read iglue second file for dis'):
+        if dis in node_dict["Disease"]:
+            continue
+
+        node_dict["Disease"][dis] = Node('Disease',**{"Name":dis})
+
+
     ###work with iglue file
     iglue_cols = ['Catalog No.', 'Product Name', 'Clinical Research Yes/NO',
        'FDA Approved Yes/No', 'CAS Number', 'Form', 'Targets',
@@ -492,7 +551,7 @@ def createNodes(tx):
     uniprotDict = pickle.load(infile)
     infile.close()
 
-    uniprot_nodes = {'Reactome': {}, 'Function': {}, 'Biological Process': {}, 'Disease': {}}
+    uniprot_nodes = {'Reactome': {}, 'Function': {}, 'Biological Process': {}}
 
     for id in uniprotDict:
 
@@ -535,14 +594,16 @@ def createNodes(tx):
         if (uniprotDict[id]['Disease']):
 
             disease_list = list(uniprotDict[id]['Disease'].keys())
-
+            #start creating disease nodes from uniprot dict
             for disease in disease_list:
 
-                if disease in uniprot_nodes['Disease']:
+                if disease in node_dict['Disease']:
                     continue
 
-                uniprot_nodes['Disease'][disease] = Node('Disease', **{'Name': disease,
+                node_dict['Disease'][disease] = Node('Disease', **{'Name': disease,
                                                                        'OMIM': f"https://www.omim.org/entry/{uniprotDict[id]['Disease'][disease]}"})
+
+
 
 
     node_dict.update(uniprot_nodes)
@@ -589,6 +650,22 @@ def createReln(tx,ptacNode):
         dtype=str,
         encoding=ENCODING
     )
+
+    ##working with second iglue file
+    iglue2 = pd.read_csv(
+        os.path.join(DATA_DIR, 'iglue2WithCID.csv'),
+        dtype=str,
+        encoding=ENCODING
+    )
+
+    cols = ['Item Name', 'Indication']
+
+    for item, ind in tqdm(iglue2[cols].values,total=iglue2.shape[0],desc= 'read 2nd iglue file for rels'):
+        if str(ind) != 'nan':
+            #if item in ptacNode['iGLUE']:
+            comp2dis = Relationship(ptacNode['iGLUE'][item],'hasDisease',ptacNode['Disease'][ind])
+            tx.create(comp2dis)
+
 
     for ligase, e3lig, protac in tqdm(e3ligand[['Target','e3ligand','protac_name']].values):
         e3ligand2ptac = Relationship(ptacNode["E3 binder"][e3lig],"isSubPartOf",ptacNode["Protac"][protac])
@@ -642,6 +719,7 @@ def createReln(tx,ptacNode):
         tx.create(targetTac)
         tx.create(e3Target)
 
+
 def createReln_uniprot(tx,ptacNode):
 
     infile = open('data/Extend_UniProtInfo', 'rb')
@@ -654,9 +732,9 @@ def createReln_uniprot(tx,ptacNode):
 
     for p in ptacNode['Protein']:
         #print('start')
-        #print(ptacNode['Protein'][p]['Uniprot'])
+        print(ptacNode['Protein'][p]['Uniprot'])
         for u in uprot:
-            print('uprot from dict: ' + u)
+            #print('uprot from dict: ' + u)
             if u == ptacNode['Protein'][p]['Uniprot']:
                 # print('check completed: '+ node_dict_new['Protein'][p]['Uniprot'])
                 # print(node_dict_new['Protein'][p]['Name'])
@@ -682,7 +760,7 @@ def createReln_uniprot(tx,ptacNode):
                 if uniprotDict[u]['Disease']:
                     diseases = uniprotDict[u]['Disease'].keys()
                     for d in diseases:
-                        uprot2dis = Relationship(ptacNode['Protein'][p], 'HasDisease', ptacNode['Disease'][d])
+                        uprot2dis = Relationship(ptacNode['Protein'][p], 'hasDisease', ptacNode['Disease'][d])
                         tx.create(uprot2dis)
 
     print('nodes from uniprot to reactome and GOs created')
@@ -831,8 +909,8 @@ createGraph()
 # db_name = graph.begin()
 # node_Dict = createNodes(db_name)
 #
-# outfile = open(os.path.join(DATA_DIR, "node_dict_new"),'wb')
+# outfile = open(os.path.join(DATA_DIR, "node_dict_june13"),'wb')
 # pickle.dump(node_Dict,outfile)
 # outfile.close()
-
+#
 
